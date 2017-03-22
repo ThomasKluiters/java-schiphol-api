@@ -47,7 +47,6 @@ Flight flight = schiphol.flight()
 // initalize APi
 Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
 
-// find flight with ID 121405342663252830
 AircraftTypes types = schiphol.aircraft()
     .execute();
 ```
