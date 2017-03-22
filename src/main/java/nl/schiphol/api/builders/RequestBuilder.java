@@ -3,12 +3,12 @@ package nl.schiphol.api.builders;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder {
+public abstract class RequestBuilder<T> {
 
     /**
      * Resource version.
      */
-    private String resourceVersion;
+    private String resourceVersion = "v3";
 
     private String appId;
 
@@ -19,31 +19,52 @@ public abstract class RequestBuilder {
     /**
      * Page number.
      */
-    private long page;
+    private Long page = null;
 
-    public RequestBuilder appId(final String appId) {
+    public RequestBuilder<T> appId(final String appId) {
         this.appId = appId;
         return this;
     }
 
-    public RequestBuilder appKey(final String appKey) {
+    public RequestBuilder<T> appKey(final String appKey) {
         this.appKey = appKey;
         return this;
     }
 
-    public RequestBuilder resourceVersion(final String resourceVersion) {
+    public RequestBuilder<T> resourceVersion(final String resourceVersion) {
         this.resourceVersion = resourceVersion;
         return this;
     }
 
-    public RequestBuilder page(final long page) {
+    public RequestBuilder<T> page(final long page) {
         this.page = page;
         return this;
     }
 
-    public RequestBuilder sort(final SortBuilder sort) {
+    public RequestBuilder<T> sort(final SortBuilder sort) {
         this.sort = sort;
         return this;
     }
 
+    public abstract T execute();
+
+    String getResourceVersion() {
+        return resourceVersion;
+    }
+
+    String getAppId() {
+        return appId;
+    }
+
+    String getAppKey() {
+        return appKey;
+    }
+
+    SortBuilder getSort() {
+        return sort;
+    }
+
+    Long getPage() {
+        return page;
+    }
 }

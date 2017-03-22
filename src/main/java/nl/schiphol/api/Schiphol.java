@@ -1,6 +1,7 @@
 package nl.schiphol.api;
 
 import com.sun.istack.internal.NotNull;
+import nl.schiphol.api.builders.FlightsBuilder;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -45,6 +46,12 @@ public class Schiphol {
 
     String getApplicationKey() {
         return applicationKey;
+    }
+
+    public FlightsBuilder flights() {
+        return (FlightsBuilder) new FlightsBuilder()
+                .appId(applicationId)
+                .appKey(applicationKey);
     }
 
 }

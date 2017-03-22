@@ -1,7 +1,23 @@
 package nl.schiphol.api.builders;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.istack.internal.NotNull;
+import nl.schiphol.api.builders.flights.FlightsResult;
+import nl.schiphol.api.builders.flights.FlightsResults;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.HttpClientUtils;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,7 +25,20 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilder extends RequestBuilder {
+public class FlightsBuilder extends RequestBuilder<FlightsResults> {
+
+    private final String[] VALID_SORT_FIELDS = {
+        "flightname",
+        "scheduledate",
+        "scheduletime",
+        "flightdirection" ,
+        "mainflight",
+        "codeshare",
+        "airline",
+        "nvlscode",
+        "destination",
+        "id"
+    };
 
     /**
      * Scheduled date for the flights to depart, format "yyyy-MM-dd".
@@ -71,9 +100,21 @@ public class FlightsBuilder extends RequestBuilder {
      */
     private LocalDate toDate;
 
-    enum FlightDirection {
+    public enum FlightDirection {
         ARRIVING,
-        DEPARTING
+        DEPARTING;
+
+        @Override
+        public String toString() {
+            switch (this) {
+                case ARRIVING:
+                    return "A";
+                case DEPARTING:
+                    return "D";
+                default:
+                    throw new RuntimeException();
+            }
+        }
     }
 
     /**
@@ -252,6 +293,98 @@ public class FlightsBuilder extends RequestBuilder {
     public FlightsBuilder to(@NotNull final LocalDate toDate) {
         this.toDate = toDate;
         return this;
+    }
+
+    @Override
+    public FlightsResults execute() {
+        //TODO: REFACTOR THIS TO RequestBuilder
+        if(getAppKey() == null) {
+            throw new IllegalArgumentException("App key must be provided.");
+        }
+
+        if(getAppId() == null) {
+            throw new IllegalArgumentException("App id must be provided.");
+        }
+
+        URIBuilder builder = new URIBuilder()
+                .setScheme("https")
+                .setHost("api.schiphol.nl")
+                .setPath("/public-flights/flights")
+            .addParameter("app_id", getAppId())
+            .addParameter("app_key", getAppKey());
+
+        if(getPage() != null) {
+            builder.addParameter("page", getPage().toString());
+        }
+
+        if(getSort() != null) {
+            builder.addParameter("sort", getSort().toString());
+        }
+
+        if(getScheduleDate() != null) {
+            builder.addParameter("scheduledate", getScheduleDate().format(dateFormat));
+        }
+
+        if(getScheduleTime() != null) {
+            builder.addParameter("scheduletime", getScheduleTime().format(timeFormat));
+        }
+
+        if(getFlightName() != null) {
+            builder.addParameter("flightname", getFlightName());
+        }
+
+        if(getFlightDirection() != null) {
+            builder.addParameter("flightdirection", getFlightDirection().toString());
+        }
+
+        if(getAirline() != null) {
+            builder.addParameter("airline", getAirline());
+        }
+
+        if(getNvlscode() != null) {
+            builder.addParameter("nvlscode", getNvlscode());
+        }
+
+        if(getRoute() != null) {
+            builder.addParameter("route", getRoute());
+        }
+
+
+        if(getFromDate() != null) {
+            builder.addParameter("fromdate", getFromDate().format(dateFormat));
+        }
+
+        if(getToDate() != null) {
+            builder.addParameter("todate", getToDate().format(dateFormat));
+        }
+
+        if(isIncludeDelays()) {
+            builder.addParameter("includedelays", String.valueOf(true));
+        }
+
+        try {
+            final URI uri = builder.build();
+            HttpGet get = new HttpGet(uri);
+            get.addHeader("Accept", "application/json");
+            get.addHeader("ResourceVersion", getResourceVersion());
+
+            final CloseableHttpClient client = HttpClients.createDefault();
+            CloseableHttpResponse response = client.execute(get);
+
+            final InputStream is = response.getEntity().getContent();
+            ObjectMapper mapper = new ObjectMapper();
+            FlightsResults results = mapper.readValue(is, FlightsResults.class);
+            HttpClientUtils.closeQuietly(client);
+            return results;
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     LocalDate getScheduleDate() {

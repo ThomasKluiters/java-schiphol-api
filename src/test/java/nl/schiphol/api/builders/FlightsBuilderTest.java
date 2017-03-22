@@ -143,4 +143,6 @@ public class FlightsBuilderTest {
         assertEquals(testDate, builder.getToDate());
     }
 
+
+
 }
