@@ -1,6 +1,13 @@
 # java-schiphol-api
 A wrapper for the Schiphol API written in Java
 
+## TODO
+
+- implement pagination
+- refactoring of the Builders
+- test thoroughly
+- verify sorting parameters
+
 ## Usage
 
 ### List Flights
