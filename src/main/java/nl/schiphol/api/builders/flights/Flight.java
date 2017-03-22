@@ -3,7 +3,7 @@ package nl.schiphol.api.builders.flights;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsResult {
+public class Flight {
 
     private long id;
 
@@ -68,7 +68,7 @@ public class FlightsResult {
     /**
      * Default constructor for Object Mapper
      */
-    FlightsResult() { }
+    Flight() { }
 
     public long getId() {
         return id;
