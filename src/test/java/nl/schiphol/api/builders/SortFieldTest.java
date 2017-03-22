@@ -30,4 +30,18 @@ public class SortFieldTest {
         assertEquals(testOrder, field.isAscending());
     }
 
+    @Test
+    public void toStringAscendingTest() {
+        SortField field = new SortField(testName, true);
+
+        assertEquals("+" + testName, field.toString());
+    }
+
+    @Test
+    public void toStringDescendingTest() {
+        SortField field = new SortField(testName, false);
+
+        assertEquals("-" + testName, field.toString());
+    }
+
 }

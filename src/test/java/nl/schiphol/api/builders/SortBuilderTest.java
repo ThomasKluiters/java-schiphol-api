@@ -1,5 +1,6 @@
 package nl.schiphol.api.builders;
 
+import com.google.common.base.Joiner;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -54,6 +55,22 @@ public class SortBuilderTest {
                .field("simple").descending();
 
         assertEquals(Arrays.asList(simpleAscendingField, simpleDescendingField), builder.getFields());
+    }
+
+    @Test
+    public void toStringSingleFieldTest() {
+        SortBuilder builder = new SortBuilder(Collections.singletonList(simpleAscendingField));
+        final String string = builder.toString();
+
+        assertEquals(simpleAscendingField.toString(), string);
+    }
+
+    @Test
+    public void toStringMultipleFieldTest() {
+        SortBuilder builder = new SortBuilder(Arrays.asList(simpleAscendingField, simpleDescendingField));
+        final String string = builder.toString();
+
+        assertEquals(simpleAscendingField.toString() + "," + simpleDescendingField.toString(), string);
     }
 
 }

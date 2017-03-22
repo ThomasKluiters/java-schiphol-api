@@ -63,11 +63,12 @@ public class SortBuilder {
         return this;
     }
 
-    public String build() {
-        return Joiner.on(",").join(getFields());
-    }
-
     List<SortField> getFields() {
         return fields;
+    }
+
+    @Override
+    public String toString() {
+        return Joiner.on(",").join(getFields());
     }
 }
