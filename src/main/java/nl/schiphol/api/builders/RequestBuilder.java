@@ -14,6 +14,8 @@ public abstract class RequestBuilder {
 
     private String appKey;
 
+    private SortBuilder sort;
+
     /**
      * Page number.
      */
@@ -28,5 +30,16 @@ public abstract class RequestBuilder {
         this.page = page;
         return this;
     }
+
+    public RequestBuilder sort(final SortBuilder sort) {
+        this.sort = sort;
+        return this;
+    }
+
+    public RequestBuilder sort(final String...fields) {
+        this.sort = new SortBuilder(fields);
+        return this;
+    }
+
 
 }

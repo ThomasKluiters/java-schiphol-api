@@ -36,6 +36,14 @@ public class SortBuilder {
         this.fields = fields;
     }
 
-
+    /**
+     * Adds the field to sort on to the list of fields to sort on.
+     *
+     * @param field the additional field to sort on.
+     */
+    public SortBuilder field(final String field) {
+        this.fields.add(field);
+        return this;
+    }
 
 }
