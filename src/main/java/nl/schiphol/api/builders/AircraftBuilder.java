@@ -50,7 +50,7 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
     protected AircraftTypes process(InputStream is) {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            mapper.readValue(is, AircraftTypes.class);
+            return mapper.readValue(is, AircraftTypes.class);
         } catch (IOException e) {
             e.printStackTrace();
         }
