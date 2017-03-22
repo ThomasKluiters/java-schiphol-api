@@ -20,8 +20,7 @@ public class AircraftBuilderExample {
         SchipholCredentials credentials = SchipholCredentialsUtil.loadFrom("secrets.json");
         Schiphol schiphol = new Schiphol(credentials);
 
-        AircraftTypes types = schiphol.aircraft()
-                .execute();
+        AircraftTypes types = schiphol.aircraft().execute();
 
         for (AircraftType aircraftType : types.getAircraftTypes()) {
             System.out.println(aircraftType.getLongDescription());

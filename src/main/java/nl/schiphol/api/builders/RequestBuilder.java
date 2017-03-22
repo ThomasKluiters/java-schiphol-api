@@ -76,6 +76,14 @@ public abstract class RequestBuilder<T> {
                 .addParameter("app_id", getAppId())
                 .addParameter("app_key", getAppKey());
 
+        if(getSort() != null) {
+            builder.addParameter("sort", getSort().toString());
+        }
+
+        if(getPage() != null) {
+            builder.addParameter("page", getPage().toString());
+        }
+
         prepare(builder);
 
          try {

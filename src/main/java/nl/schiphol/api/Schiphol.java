@@ -2,6 +2,8 @@ package nl.schiphol.api;
 
 import com.sun.istack.internal.NotNull;
 import nl.schiphol.api.builders.AircraftBuilder;
+import nl.schiphol.api.builders.DestinationBuilder;
+import nl.schiphol.api.builders.DestinationsBuilder;
 import nl.schiphol.api.builders.FlightsBuilder;
 
 /**
@@ -57,6 +59,18 @@ public class Schiphol {
 
     public AircraftBuilder aircraft() {
         return (AircraftBuilder) new AircraftBuilder()
+                .appId(applicationId)
+                .appKey(applicationKey);
+    }
+
+    public DestinationBuilder destination() {
+        return (DestinationBuilder) new DestinationBuilder()
+                .appId(applicationId)
+                .appKey(applicationKey);
+    }
+
+    public DestinationsBuilder destinations() {
+        return (DestinationsBuilder) new DestinationsBuilder()
                 .appId(applicationId)
                 .appKey(applicationKey);
     }
