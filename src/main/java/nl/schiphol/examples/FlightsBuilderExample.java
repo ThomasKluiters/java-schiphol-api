@@ -29,17 +29,14 @@ public class FlightsBuilderExample {
 
         // search for all KL flights, departing between today and a week
         Flights result = schiphol.flights()
-            .from(fromDate)
-            .to(toDate)
-            .airline("KL")
-            .direction("D")
-            .page(0)
-            .sort(sort)
-        .execute();
-
-        for (Flight flight : result.getFlights()) {
-            System.out.println(flight.getId());
-        }
+                .from(fromDate)
+                .to(toDate)
+                .airline("KL")
+                .direction("D")
+                .page(0)
+                .sort(sort)
+                .execute();
+        
     }
 
 }

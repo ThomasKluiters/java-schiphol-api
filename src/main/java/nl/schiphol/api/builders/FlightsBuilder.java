@@ -316,7 +316,6 @@ public class FlightsBuilder extends RequestBuilder<Flights> {
             builder.addParameter("route", getRoute());
         }
 
-
         if(getFromDate() != null) {
             builder.addParameter("fromdate", getFromDate().format(dateFormat));
         }
