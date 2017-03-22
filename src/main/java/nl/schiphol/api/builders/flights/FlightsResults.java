@@ -9,7 +9,6 @@ public class FlightsResults {
 
     private FlightsResult[]  flights;
 
-    @JsonProperty("schemaVersion")
     private String schemaVersion;
 
     FlightsResults() { }

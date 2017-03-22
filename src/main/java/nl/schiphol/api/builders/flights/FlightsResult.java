@@ -51,28 +51,20 @@ public class FlightsResult {
 
     private FlightCheckinAllocations checkinAllocations;
 
-    @JsonProperty("transferPositions")
     private int[] transferPositions;
 
-    @JsonProperty("aircraftType")
     private FlightAircraftType aircraftType;
 
-    @JsonProperty("aircraftRegistration")
     private String aircraftRegistration;
 
-    @JsonProperty("airlineCode")
     private String airlineCode;
 
-    @JsonProperty("expectedTimeGateOpen")
     private String expectedTimeGateOpen;
 
-    @JsonProperty("expectedTimeBoarding")
     private String expectedTimeBoarding;
 
-    @JsonProperty("expectedTimeGateClosing")
     private String expectedTimeGateClosing;
 
-    @JsonProperty("schemaVersion")
     private String schemaVersion;
 
     /**
@@ -166,5 +158,37 @@ public class FlightsResult {
 
     public FlightCheckinAllocations getCheckinAllocations() {
         return checkinAllocations;
+    }
+
+    public int[] getTransferPositions() {
+        return transferPositions;
+    }
+
+    public FlightAircraftType getAircraftType() {
+        return aircraftType;
+    }
+
+    public String getAircraftRegistration() {
+        return aircraftRegistration;
+    }
+
+    public String getAirlineCode() {
+        return airlineCode;
+    }
+
+    public String getExpectedTimeGateOpen() {
+        return expectedTimeGateOpen;
+    }
+
+    public String getExpectedTimeBoarding() {
+        return expectedTimeBoarding;
+    }
+
+    public String getExpectedTimeGateClosing() {
+        return expectedTimeGateClosing;
+    }
+
+    public String getSchemaVersion() {
+        return schemaVersion;
     }
 }

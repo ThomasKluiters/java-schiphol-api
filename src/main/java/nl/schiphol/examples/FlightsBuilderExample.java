@@ -4,6 +4,7 @@ import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
 import nl.schiphol.api.builders.FlightsBuilder;
+import nl.schiphol.api.builders.flights.FlightsResult;
 import nl.schiphol.api.builders.flights.FlightsResults;
 import nl.schiphol.api.builders.SortBuilder;
 
@@ -26,6 +27,9 @@ public class FlightsBuilderExample {
                 .sort(sortBuilder)
         .execute();
 
+        for (FlightsResult flightsResult : result.getFlights()) {
+            System.out.println(flightsResult.);
+        }
     }
 
 }
