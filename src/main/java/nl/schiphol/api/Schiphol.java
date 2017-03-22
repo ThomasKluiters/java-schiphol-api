@@ -30,6 +30,16 @@ public class Schiphol {
         this.applicationKey = applicationKey;
     }
 
+    /**
+     * @see #Schiphol(String, String)
+     *
+     * @param credentials your application credentials.
+     */
+    public Schiphol(@NotNull SchipholCredentials credentials) {
+        this(credentials.getId(), credentials.getKey());
+    }
+
+
 
 
 }
