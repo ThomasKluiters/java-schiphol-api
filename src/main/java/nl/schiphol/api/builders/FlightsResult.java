@@ -5,6 +5,6 @@ package nl.schiphol.api.builders;
  */
 public class FlightsResult {
 
-    
+
 
 }
