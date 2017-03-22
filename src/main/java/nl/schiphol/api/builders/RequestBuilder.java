@@ -36,10 +36,4 @@ public abstract class RequestBuilder {
         return this;
     }
 
-    public RequestBuilder sort(final String...fields) {
-        this.sort = new SortBuilder(fields);
-        return this;
-    }
-
-
 }
