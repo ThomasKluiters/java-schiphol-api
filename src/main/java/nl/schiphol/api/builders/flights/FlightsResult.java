@@ -1,7 +1,5 @@
 package nl.schiphol.api.builders.flights;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Created by Thomas on 22-3-2017.
  */
@@ -51,7 +49,7 @@ public class FlightsResult {
 
     private FlightCheckinAllocations checkinAllocations;
 
-    private int[] transferPositions;
+    private FlightTransferPositions transferPositions;
 
     private FlightAircraftType aircraftType;
 
@@ -160,7 +158,7 @@ public class FlightsResult {
         return checkinAllocations;
     }
 
-    public int[] getTransferPositions() {
+    public FlightTransferPositions getTransferPositions() {
         return transferPositions;
     }
 

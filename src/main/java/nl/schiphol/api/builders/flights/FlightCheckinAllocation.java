@@ -9,8 +9,23 @@ public class FlightCheckinAllocation {
 
     private String startTime;
 
+    private Rows rows;
 
-    public class Rows {
+    FlightCheckinAllocation() { }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public Rows getRows() {
+        return rows;
+    }
+
+    public static class Rows {
 
         private Row[] rows;
 
@@ -21,7 +36,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public class Row {
+    public static  class Row {
 
         private Desks desks;
 
@@ -38,7 +53,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public class Desks {
+    public static  class Desks {
 
         private Desk[] desks;
 
@@ -52,7 +67,7 @@ public class FlightCheckinAllocation {
 
     }
 
-    public class Desk {
+    public static  class Desk {
 
         private CheckinClass checkinClass;
 
@@ -69,7 +84,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public class CheckinClass {
+    public static  class CheckinClass {
 
         private String code;
 

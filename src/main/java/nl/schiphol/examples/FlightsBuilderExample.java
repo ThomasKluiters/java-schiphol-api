@@ -18,17 +18,18 @@ public class FlightsBuilderExample {
         Schiphol schiphol = new Schiphol(credentials);
 
         SortBuilder sortBuilder = new SortBuilder()
-                .field("id").ascending();
+                .field("scheduletime").descending();
 
         FlightsResults result = schiphol.flights()
                 .direction(FlightsBuilder.FlightDirection.ARRIVING)
                 .airline("KL")
+                .direction("D")
                 .page(0)
                 .sort(sortBuilder)
         .execute();
 
         for (FlightsResult flightsResult : result.getFlights()) {
-            System.out.println(flightsResult.);
+            System.out.println(flightsResult.getFlightName() + " will depart at " + flightsResult.getScheduleTime());
         }
     }
 

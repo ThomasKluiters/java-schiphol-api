@@ -16,4 +16,8 @@ public class FlightsResults {
     public FlightsResult[] getFlights() {
         return flights;
     }
+
+    public String getSchemaVersion() {
+        return schemaVersion;
+    }
 }

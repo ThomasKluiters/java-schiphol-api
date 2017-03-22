@@ -376,11 +376,7 @@ public class FlightsBuilder extends RequestBuilder<FlightsResults> {
             FlightsResults results = mapper.readValue(is, FlightsResults.class);
             HttpClientUtils.closeQuietly(client);
             return results;
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (URISyntaxException | IOException e) {
             e.printStackTrace();
         }
 
