@@ -9,7 +9,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-class SimpleRequestBuilder<T> extends RequestBuilder<T> {
+public  class SimpleRequestBuilder<T> extends RequestBuilder<T> {
 
     /**
      * The class to which the ObjectMapper maps the JSON to.

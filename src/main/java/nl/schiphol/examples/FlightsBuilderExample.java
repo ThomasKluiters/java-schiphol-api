@@ -3,6 +3,7 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
+import nl.schiphol.api.builders.flights.Flight;
 import nl.schiphol.api.builders.flights.Flights;
 import nl.schiphol.api.builders.SortBuilder;
 
@@ -21,7 +22,7 @@ public class FlightsBuilderExample {
         // sort on date, then sort on time
         SortBuilder sort = new SortBuilder()
                 .field("scheduledate").descending()
-                .field("scheduletime").ascending();
+                .field("scheduletime").descending();
 
         LocalDate fromDate = LocalDate.now();
         LocalDate toDate = LocalDate.now().plusWeeks(1);
@@ -35,6 +36,10 @@ public class FlightsBuilderExample {
             .page(0)
             .sort(sort)
         .execute();
+
+        for (Flight flight : result.getFlights()) {
+            System.out.println(flight.getId());
+        }
     }
 
 }

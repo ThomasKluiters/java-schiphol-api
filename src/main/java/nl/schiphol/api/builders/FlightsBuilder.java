@@ -3,17 +3,10 @@ package nl.schiphol.api.builders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.istack.internal.NotNull;
 import nl.schiphol.api.builders.flights.Flights;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -294,14 +287,6 @@ public class FlightsBuilder extends RequestBuilder<Flights> {
     @Override
     public void prepare(URIBuilder builder) {
         builder.setPath("/public-flights/flights");
-
-        if(getPage() != null) {
-            builder.addParameter("page", getPage().toString());
-        }
-
-        if(getSort() != null) {
-            builder.addParameter("sort", getSort().toString());
-        }
 
         if(getScheduleDate() != null) {
             builder.addParameter("scheduledate", getScheduleDate().format(dateFormat));
