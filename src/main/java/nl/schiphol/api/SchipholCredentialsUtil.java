@@ -26,12 +26,6 @@ public class SchipholCredentialsUtil {
             FileInputStream fis = new FileInputStream(path);
             ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(fis, SchipholCredentials.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

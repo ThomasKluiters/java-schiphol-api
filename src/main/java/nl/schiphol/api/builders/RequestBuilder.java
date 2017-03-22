@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder<T> {
+abstract class RequestBuilder<T> {
 
     /**
      * Resource version.
@@ -73,8 +73,8 @@ public abstract class RequestBuilder<T> {
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
                 .setHost("api.schiphol.nl")
-                .addParameter("app_id", getAppId())
-                .addParameter("app_key", getAppKey());
+            .addParameter("app_id", getAppId())
+            .addParameter("app_key", getAppKey());
 
         if(getSort() != null) {
             builder.addParameter("sort", getSort().toString());

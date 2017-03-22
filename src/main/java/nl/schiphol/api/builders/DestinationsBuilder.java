@@ -12,26 +12,8 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class DestinationsBuilder extends RequestBuilder<Destinations> {
-
+public class DestinationsBuilder extends SimpleRequestBuilder<Destinations> {
     public DestinationsBuilder() {
-        resourceVersion("v1");
+        super(Destinations.class, "/public-flights/destinations", "v1");
     }
-
-    @Override
-    protected Destinations process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, Destinations.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    protected void prepare(URIBuilder builder) {
-        builder.setPath("/public-flights/destinations");
-    }
-
 }
