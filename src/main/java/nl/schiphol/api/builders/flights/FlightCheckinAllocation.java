@@ -36,7 +36,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public static  class Row {
+    public static class Row {
 
         private Desks desks;
 
@@ -53,7 +53,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public static  class Desks {
+    public static class Desks {
 
         private Desk[] desks;
 
@@ -67,7 +67,7 @@ public class FlightCheckinAllocation {
 
     }
 
-    public static  class Desk {
+    public static class Desk {
 
         private CheckinClass checkinClass;
 
@@ -84,7 +84,7 @@ public class FlightCheckinAllocation {
         }
     }
 
-    public static  class CheckinClass {
+    public static class CheckinClass {
 
         private String code;
 
