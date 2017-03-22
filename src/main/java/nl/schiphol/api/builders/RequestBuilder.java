@@ -73,8 +73,16 @@ public abstract class RequestBuilder<T> {
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
                 .setHost("api.schiphol.nl")
-                .addParameter("app_id", getAppId())
-                .addParameter("app_key", getAppKey());
+            .addParameter("app_id", getAppId())
+            .addParameter("app_key", getAppKey());
+
+        if(getSort() != null) {
+            builder.addParameter("sort", getSort().toString());
+        }
+
+        if(getPage() != null) {
+            builder.addParameter("page", getPage().toString());
+        }
 
         prepare(builder);
 
