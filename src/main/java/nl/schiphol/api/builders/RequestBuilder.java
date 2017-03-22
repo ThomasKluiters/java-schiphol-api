@@ -21,6 +21,16 @@ public abstract class RequestBuilder {
      */
     private long page;
 
+    public RequestBuilder appId(final String appId) {
+        this.appId = appId;
+        return this;
+    }
+
+    public RequestBuilder appKey(final String appKey) {
+        this.appKey = appKey;
+        return this;
+    }
+
     public RequestBuilder resourceVersion(final String resourceVersion) {
         this.resourceVersion = resourceVersion;
         return this;
