@@ -39,7 +39,12 @@ public class Schiphol {
         this(credentials.getId(), credentials.getKey());
     }
 
+    String getApplicationId() {
+        return applicationId;
+    }
 
-
+    String getApplicationKey() {
+        return applicationKey;
+    }
 
 }
