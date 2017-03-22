@@ -1,19 +1,17 @@
 package nl.schiphol.api.builders.flights;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsResults {
+public class Flights {
 
-    private FlightsResult[]  flights;
+    private Flight[]  flights;
 
     private String schemaVersion;
 
-    FlightsResults() { }
+    Flights() { }
 
-    public FlightsResult[] getFlights() {
+    public Flight[] getFlights() {
         return flights;
     }
 

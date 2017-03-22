@@ -3,9 +3,7 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
-import nl.schiphol.api.builders.FlightsBuilder;
-import nl.schiphol.api.builders.flights.FlightsResult;
-import nl.schiphol.api.builders.flights.FlightsResults;
+import nl.schiphol.api.builders.flights.Flights;
 import nl.schiphol.api.builders.SortBuilder;
 
 import java.time.LocalDate;
@@ -29,7 +27,7 @@ public class FlightsBuilderExample {
         LocalDate toDate = LocalDate.now().plusWeeks(1);
 
         // search for all KL flights, departing between today and a week
-        FlightsResults result = schiphol.flights()
+        Flights result = schiphol.flights()
             .from(fromDate)
             .to(toDate)
             .airline("KL")
