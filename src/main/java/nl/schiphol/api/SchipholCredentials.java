@@ -26,6 +26,18 @@ public class SchipholCredentials {
         this.key = key;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SchipholCredentials)) return false;
+
+        SchipholCredentials that = (SchipholCredentials) o;
+
+        if (id != null ? !id.equals(that.id) : that.id != null) return false;
+        return key != null ? key.equals(that.key) : that.key == null;
+
+    }
+
     public String getId() {
         return id;
     }

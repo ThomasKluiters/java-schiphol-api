@@ -19,16 +19,16 @@ public class SchipholTest {
     public void defaultConstructorTest() {
         final Schiphol schiphol = new Schiphol(testId, testKey);
 
-        assertEquals(schiphol.getApplicationId(), testId);
-        assertEquals(schiphol.getApplicationKey(), testKey);
+        assertEquals(testId, schiphol.getApplicationId());
+        assertEquals(testKey, schiphol.getApplicationKey());
     }
 
     @Test
     public void manualCredentialsTest() {
         final Schiphol schiphol = new Schiphol(testCredentials);
 
-        assertEquals(schiphol.getApplicationId(), testId);
-        assertEquals(schiphol.getApplicationKey(), testKey);
+        assertEquals(testId, schiphol.getApplicationId());
+        assertEquals(testKey, schiphol.getApplicationKey());
     }
 
 }
