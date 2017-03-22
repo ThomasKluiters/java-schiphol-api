@@ -8,12 +8,18 @@ public class SchipholCredentials {
     /**
      * The app id.
      */
-    private final String id;
+    private String id;
 
     /**
      * The app key.
      */
-    private final String key;
+    private String key;
+
+    /**
+     * Empty constructor for object mapping.
+     */
+    @SuppressWarnings("unused")
+    SchipholCredentials() {}
 
     /**
      * Initializes the Credentials object with the given key and id.
