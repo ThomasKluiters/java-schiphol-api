@@ -3,6 +3,7 @@ package nl.schiphol.api.builders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.istack.internal.NotNull;
 import nl.schiphol.api.builders.flights.Flights;
+import nl.schiphol.examples.FlightsBuilderExample;
 import org.apache.http.client.utils.URIBuilder;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilder extends RequestBuilder<Flights> {
+public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> {
 
     private final String[] VALID_SORT_FIELDS = {
         "flightname",
@@ -104,6 +105,12 @@ public class FlightsBuilder extends RequestBuilder<Flights> {
                     throw new RuntimeException();
             }
         }
+    }
+
+    public FlightsBuilder() {
+        super(Flights.class);
+
+        resourceVersion("v3");
     }
 
     /**
@@ -331,14 +338,8 @@ public class FlightsBuilder extends RequestBuilder<Flights> {
     }
 
     @Override
-    protected Flights process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, Flights.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected FlightsBuilder getThis() {
+        return this;
     }
 
     LocalDate getScheduleDate() {

@@ -10,7 +10,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightBuilder extends RequestBuilder<Flight> {
+public class FlightBuilder extends JsonRequestBuilder<Flight, FlightBuilder> {
 
     /**
      * Id of the flight.
@@ -21,6 +21,12 @@ public class FlightBuilder extends RequestBuilder<Flight> {
      * Name of the flight.
      */
     private String flightName;
+
+    public FlightBuilder() {
+        super(Flight.class);
+
+        resourceVersion("v1");
+    }
 
     public FlightBuilder id(Long id) {
         this.id = id;
@@ -33,15 +39,10 @@ public class FlightBuilder extends RequestBuilder<Flight> {
     }
 
     @Override
-    protected Flight process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, Flight.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected FlightBuilder getThis() {
+        return this;
     }
+
 
     @Override
     protected void prepare(URIBuilder builder) {

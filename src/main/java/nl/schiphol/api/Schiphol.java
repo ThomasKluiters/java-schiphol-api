@@ -49,33 +49,29 @@ public class Schiphol {
         return applicationKey;
     }
 
+    private <T extends RequestBuilder<?, T>> T prepare(final T builder) {
+        return builder
+                .appId(applicationId)
+                .appKey(applicationKey);
+    }
+
     public FlightsBuilder flights() {
-        return (FlightsBuilder) new FlightsBuilder()
-                .appId(applicationId)
-                .appKey(applicationKey);
-    }
-
-    public AircraftBuilder aircraft() {
-        return (AircraftBuilder) new AircraftBuilder()
-                .appId(applicationId)
-                .appKey(applicationKey);
-    }
-
-    public DestinationBuilder destination() {
-        return (DestinationBuilder) new DestinationBuilder()
-                .appId(applicationId)
-                .appKey(applicationKey);
-    }
-
-    public DestinationsBuilder destinations() {
-        return (DestinationsBuilder) new DestinationsBuilder()
-                .appId(applicationId)
-                .appKey(applicationKey);
+        return prepare(new FlightsBuilder());
     }
 
     public FlightBuilder flight() {
-        return (FlightBuilder) new FlightBuilder()
-                .appId(applicationId)
-                .appKey(applicationKey);
+        return prepare(new FlightBuilder());
+    }
+
+    public AircraftBuilder aircraft() {
+        return prepare(new AircraftBuilder());
+    }
+
+    public DestinationsBuilder destinations() {
+        return prepare(new DestinationsBuilder());
+    }
+
+    public DestinationBuilder destination() {
+        return prepare(new DestinationBuilder());
     }
 }

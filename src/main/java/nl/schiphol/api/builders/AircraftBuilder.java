@@ -2,6 +2,7 @@ package nl.schiphol.api.builders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.istack.internal.NotNull;
+import nl.schiphol.api.builders.aircraft.AircraftType;
 import nl.schiphol.api.builders.aircraft.AircraftTypes;
 import org.apache.http.client.utils.URIBuilder;
 
@@ -11,7 +12,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
+public class AircraftBuilder extends JsonRequestBuilder<AircraftTypes, AircraftBuilder> {
 
     /**
      * IATA main code.
@@ -24,6 +25,8 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
     private String iatasub;
 
     public AircraftBuilder() {
+        super(AircraftTypes.class);
+
         this.resourceVersion("v1");
     }
 
@@ -48,14 +51,8 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
     }
 
     @Override
-    protected AircraftTypes process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, AircraftTypes.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+    protected AircraftBuilder getThis() {
+        return this;
     }
 
     @Override
