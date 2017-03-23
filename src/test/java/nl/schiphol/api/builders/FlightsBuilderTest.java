@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilderTest {
+public class FlightsBuilderTest extends RequestBuilderTest {
 
     private final int testYear = 2017;
 
@@ -144,5 +144,8 @@ public class FlightsBuilderTest {
     }
 
 
-
+    @Override
+    RequestBuilder getInstance() {
+        return new FlightBuilder();
+    }
 }
