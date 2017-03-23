@@ -10,7 +10,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightBuilder extends RequestBuilder<Flight> {
+public class FlightBuilder extends RequestBuilder<Flight, FlightBuilder> {
 
     /**
      * Id of the flight.
@@ -29,6 +29,11 @@ public class FlightBuilder extends RequestBuilder<Flight> {
 
     public FlightBuilder flightName(String flightName) {
         this.flightName = flightName;
+        return this;
+    }
+
+    @Override
+    protected FlightBuilder getThis() {
         return this;
     }
 

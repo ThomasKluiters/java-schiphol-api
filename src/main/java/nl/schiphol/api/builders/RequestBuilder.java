@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder<T> {
+public abstract class RequestBuilder<T, B extends RequestBuilder> {
 
     /**
      * Resource version.
@@ -36,29 +36,29 @@ public abstract class RequestBuilder<T> {
      */
     private Long page = null;
 
-    public RequestBuilder<T> appId(final String appId) {
+    public B appId(final String appId) {
         this.appId = appId;
-        return this;
+        return getThis();
     }
 
-    public RequestBuilder<T> appKey(final String appKey) {
+    public B appKey(final String appKey) {
         this.appKey = appKey;
-        return this;
+        return getThis();
     }
 
-    public RequestBuilder<T> resourceVersion(final String resourceVersion) {
+    public B resourceVersion(final String resourceVersion) {
         this.resourceVersion = resourceVersion;
-        return this;
+        return getThis();
     }
 
-    public RequestBuilder<T> page(final long page) {
+    public B page(final long page) {
         this.page = page;
-        return this;
+        return getThis();
     }
 
-    public RequestBuilder<T> sort(final SortBuilder sort) {
+    public B sort(final SortBuilder sort) {
         this.sort = sort;
-        return this;
+        return getThis();
     }
 
     public T execute() {
@@ -104,6 +104,8 @@ public abstract class RequestBuilder<T> {
          }
         return null;
     }
+
+    protected abstract B getThis();
 
     protected abstract T process(InputStream is);
 

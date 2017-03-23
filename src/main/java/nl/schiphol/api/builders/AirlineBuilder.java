@@ -8,7 +8,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AirlineBuilder extends RequestBuilder<Airline> {
+public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
 
     /**
       * The IATA / ICAO code of the airline.
@@ -23,6 +23,11 @@ public class AirlineBuilder extends RequestBuilder<Airline> {
      */
     public AirlineBuilder airlineCode(String airlineCode) {
         this.airlineCode = airlineCode;
+        return this;
+    }
+
+    @Override
+    protected AirlineBuilder getThis() {
         return this;
     }
 

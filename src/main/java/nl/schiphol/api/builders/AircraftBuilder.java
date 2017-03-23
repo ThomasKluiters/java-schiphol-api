@@ -11,7 +11,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
+public class AircraftBuilder extends RequestBuilder<AircraftTypes, AircraftBuilder> {
 
     /**
      * IATA main code.
@@ -44,6 +44,11 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes> {
      */
     public AircraftBuilder iatasub(@NotNull final String iatasub) {
         this.iatasub = iatasub;
+        return this;
+    }
+
+    @Override
+    protected AircraftBuilder getThis() {
         return this;
     }
 
