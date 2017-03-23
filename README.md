@@ -4,7 +4,7 @@ A wrapper for the Schiphol API written in Java
 ## TODO
 
 - implement pagination
-- refactoring of the Builders
+- refactor Builders
 - test thoroughly
 - verify sorting parameters
 
@@ -37,7 +37,7 @@ Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
 
 // find flight with ID 121405342663252830
 Flight flight = schiphol.flight()
-      .id(121405342663252830(
+      .id(121405342663252830)
     .execute();
 ```
 
