@@ -41,17 +41,6 @@ public class DestinationBuilder extends JsonRequestBuilder<Destination, Destinat
     }
 
     @Override
-    protected Destination process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, Destination.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
     protected void prepare(URIBuilder builder) {
         if(getIata() == null) {
             throw new IllegalArgumentException();
