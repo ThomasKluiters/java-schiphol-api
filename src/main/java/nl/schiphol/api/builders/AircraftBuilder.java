@@ -1,13 +1,9 @@
 package nl.schiphol.api.builders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.internal.NotNull;
-import nl.schiphol.api.builders.aircraft.AircraftType;
 import nl.schiphol.api.builders.aircraft.AircraftTypes;
 import org.apache.http.client.utils.URIBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.Nonnull;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -35,7 +31,7 @@ public class AircraftBuilder extends JsonRequestBuilder<AircraftTypes, AircraftB
      *
      * @param iatamain IATA main code.
      */
-    public AircraftBuilder iatamain(@NotNull final String iatamain) {
+    public AircraftBuilder iatamain(@Nonnull final String iatamain) {
         this.iatamain = iatamain;
         return this;
     }
@@ -45,7 +41,7 @@ public class AircraftBuilder extends JsonRequestBuilder<AircraftTypes, AircraftB
      *
      * @param iatasub IATA sub code.
      */
-    public AircraftBuilder iatasub(@NotNull final String iatasub) {
+    public AircraftBuilder iatasub(@Nonnull final String iatasub) {
         this.iatasub = iatasub;
         return this;
     }

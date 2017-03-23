@@ -2,12 +2,11 @@ package nl.schiphol.api.builders;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
-import com.sun.istack.internal.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.StringJoiner;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -48,7 +47,7 @@ public class SortBuilder {
      *
      * @param name the name of the field to sort on
      */
-    public SortBuilder field(@NotNull final String name) {
+    public SortBuilder field(@Nonnull final String name) {
         this.fields.add(new SortField(name));
         return this;
     }

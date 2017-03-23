@@ -1,12 +1,9 @@
 package nl.schiphol.api;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.internal.NotNull;
 
+import javax.annotation.Nonnull;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 /**
@@ -21,7 +18,7 @@ public class SchipholCredentialsUtil {
      *
      * @return if successful the SchipholCredentials representation of the file, else null
      */
-    public synchronized static SchipholCredentials loadFrom(@NotNull final String path) {
+    public synchronized static SchipholCredentials loadFrom(@Nonnull final String path) {
         try {
             FileInputStream fis = new FileInputStream(path);
             ObjectMapper mapper = new ObjectMapper();
