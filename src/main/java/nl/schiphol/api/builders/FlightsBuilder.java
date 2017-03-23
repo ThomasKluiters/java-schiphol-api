@@ -1,13 +1,9 @@
 package nl.schiphol.api.builders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.istack.internal.NotNull;
 import nl.schiphol.api.builders.flights.Flights;
-import nl.schiphol.examples.FlightsBuilderExample;
 import org.apache.http.client.utils.URIBuilder;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -118,7 +114,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw scheduled date to get flights from represented as a String with the format yyyy-MM-dd.
      */
-    public FlightsBuilder scheduleDate(@NotNull final String raw) {
+    public FlightsBuilder scheduleDate(@Nonnull final String raw) {
         return scheduleDate(LocalDate.parse(raw, dateFormat));
     }
 
@@ -127,7 +123,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param scheduleDate scheduled date to get flights for.
      */
-    public FlightsBuilder scheduleDate(@NotNull final LocalDate scheduleDate) {
+    public FlightsBuilder scheduleDate(@Nonnull final LocalDate scheduleDate) {
         this.scheduleDate = scheduleDate;
         return this;
     }
@@ -137,7 +133,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw scheduled time to get flights from represented as a String with the format HH:mm.
      */
-    public FlightsBuilder scheduleTime(@NotNull final String raw) {
+    public FlightsBuilder scheduleTime(@Nonnull final String raw) {
         return scheduleTime(LocalTime.parse(raw, timeFormat));
     }
 
@@ -146,7 +142,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param scheduleTime scheduled time to get flights from.
      */
-    public FlightsBuilder scheduleTime(@NotNull final LocalTime scheduleTime) {
+    public FlightsBuilder scheduleTime(@Nonnull final LocalTime scheduleTime) {
         this.scheduleTime = scheduleTime;
         return this;
     }
@@ -156,7 +152,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param flightName flight number as printed on the ticket.
      */
-    public FlightsBuilder flightName(@NotNull final String flightName) {
+    public FlightsBuilder flightName(@Nonnull final String flightName) {
         this.flightName = flightName;
         return this;
     }
@@ -168,7 +164,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw a String with either "A" or "B" representing the flight direction.
      */
-    public FlightsBuilder direction(@NotNull final String raw) {
+    public FlightsBuilder direction(@Nonnull final String raw) {
         if(raw.length() != 1) {
             throw new IllegalArgumentException();
         }
@@ -182,7 +178,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw a character with either the value 'A' or 'D' representing the flight direction.
      */
-    public FlightsBuilder direction(@NotNull final char raw) {
+    public FlightsBuilder direction(@Nonnull final char raw) {
         switch (raw) {
             case 'A':
                 return direction(FlightDirection.ARRIVING);
@@ -201,7 +197,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param direction the FlightDirection of the flight.
      */
-    public FlightsBuilder direction(@NotNull final FlightDirection direction) {
+    public FlightsBuilder direction(@Nonnull final FlightDirection direction) {
         this.flightDirection = direction;
         return this;
     }
@@ -212,7 +208,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param airline prefix in flight number as printed on the ticket (size: 2 or 3 characters).
      */
-    public FlightsBuilder airline(@NotNull final String airline) {
+    public FlightsBuilder airline(@Nonnull final String airline) {
         if(airline.length() != 2 && airline.length() != 3) {
             throw new IllegalArgumentException();
         }
@@ -225,7 +221,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param nvlscode NVLS code of a airliner.
      */
-    public FlightsBuilder nvlsCode(@NotNull final String nvlscode) {
+    public FlightsBuilder nvlsCode(@Nonnull final String nvlscode) {
         this.nvlscode = nvlscode;
         return this;
     }
@@ -255,7 +251,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw the string representation of the from date.
      */
-    public FlightsBuilder from(@NotNull final String raw) {
+    public FlightsBuilder from(@Nonnull final String raw) {
         return from(LocalDate.parse(raw, dateFormat));
     }
 
@@ -264,7 +260,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param fromDate the LocalDate representation of the date.
      */
-    public FlightsBuilder from(@NotNull final LocalDate fromDate) {
+    public FlightsBuilder from(@Nonnull final LocalDate fromDate) {
         this.fromDate = fromDate;
         return this;
     }
@@ -277,7 +273,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param raw the string representation of the from date.
      */
-    public FlightsBuilder to(@NotNull final String raw) {
+    public FlightsBuilder to(@Nonnull final String raw) {
         return to(LocalDate.parse(raw, dateFormat));
     }
 
@@ -286,7 +282,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      *
      * @param toDate the LocalDate representation of the date.
      */
-    public FlightsBuilder to(@NotNull final LocalDate toDate) {
+    public FlightsBuilder to(@Nonnull final LocalDate toDate) {
         this.toDate = toDate;
         return this;
     }

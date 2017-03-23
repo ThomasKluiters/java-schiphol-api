@@ -1,8 +1,8 @@
 package nl.schiphol.api;
 
-import com.sun.istack.internal.NotNull;
 import nl.schiphol.api.builders.*;
-import nl.schiphol.api.builders.flights.Flight;
+
+import javax.annotation.Nonnull;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -27,7 +27,7 @@ public class Schiphol {
      * @param applicationId your API app id
      * @param applicationKey your API app key
      */
-    public Schiphol(@NotNull final String applicationId, @NotNull final String applicationKey) {
+    public Schiphol(@Nonnull final String applicationId, @Nonnull final String applicationKey) {
         this.applicationId = applicationId;
         this.applicationKey = applicationKey;
     }
@@ -37,7 +37,7 @@ public class Schiphol {
      *
      * @param credentials your application credentials.
      */
-    public Schiphol(@NotNull SchipholCredentials credentials) {
+    public Schiphol(@Nonnull SchipholCredentials credentials) {
         this(credentials.getId(), credentials.getKey());
     }
 
