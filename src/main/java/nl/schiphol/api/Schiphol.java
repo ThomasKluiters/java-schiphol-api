@@ -1,6 +1,8 @@
 package nl.schiphol.api;
 
 import nl.schiphol.api.builders.*;
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.HttpClients;
 
 import javax.annotation.Nonnull;
 
@@ -20,6 +22,26 @@ public class Schiphol {
     private final String applicationKey;
 
     /**
+     * The HttpClient to perform requests with.
+     */
+    private final HttpClient httpClient;
+
+    /**
+     * Initializes a Schiphol object on which API requests can be made.
+     *
+     * It is necessary to supply  both the app id, and app key in order to perform an requests.
+     *
+     * @param applicationId your API app id.
+     * @param applicationKey your API app key.
+     * @param httpClient the HttpClient to perform requests with.
+     */
+    public Schiphol(String applicationId, String applicationKey, HttpClient httpClient) {
+        this.applicationId = applicationId;
+        this.applicationKey = applicationKey;
+        this.httpClient = httpClient;
+    }
+
+    /**
      * Initializes a Schiphol object on which API requests can be made.
      *
      * It is necessary to supply  both the app id, and app key in order to perform an requests.
@@ -28,8 +50,7 @@ public class Schiphol {
      * @param applicationKey your API app key
      */
     public Schiphol(@Nonnull final String applicationId, @Nonnull final String applicationKey) {
-        this.applicationId = applicationId;
-        this.applicationKey = applicationKey;
+        this(applicationId, applicationKey, HttpClients.createDefault());
     }
 
     /**
@@ -52,7 +73,8 @@ public class Schiphol {
     private <T extends RequestBuilder<?, T>> T prepare(final T builder) {
         return builder
                 .appId(applicationId)
-                .appKey(applicationKey);
+                .appKey(applicationKey)
+                .withClient(httpClient);
     }
 
     public FlightsBuilder flights() {

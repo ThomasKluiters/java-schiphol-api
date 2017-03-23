@@ -1,6 +1,10 @@
 package nl.schiphol.api.builders;
 
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.junit.Test;
+import org.mockito.ArgumentMatcher;
 
 import static org.junit.Assert.assertEquals;
 
@@ -60,6 +64,26 @@ public abstract class RequestBuilderTest {
         builder.resourceVersion(testResourceVersion);
 
         assertEquals(testResourceVersion, builder.getResourceVersion());
+    }
+
+    protected class URIMatcher extends ArgumentMatcher<HttpUriRequest> {
+
+        private final String name;
+
+        private final String value;
+
+        public URIMatcher(String name, String value) {
+            this.name = name;
+            this.value = value;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            HttpUriRequest request = (HttpUriRequest)o;
+            return new URIBuilder(request.getURI())
+                    .getQueryParams()
+                    .contains(new BasicNameValuePair(name, value));
+        }
     }
 
 }
