@@ -12,7 +12,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class DestinationBuilder extends RequestBuilder<Destination, DestinationBuilder> {
+public class DestinationBuilder extends JsonRequestBuilder<Destination, DestinationBuilder> {
 
     /**
      * IATA code.
@@ -20,6 +20,8 @@ public class DestinationBuilder extends RequestBuilder<Destination, DestinationB
     private String iata;
 
     public DestinationBuilder() {
+        super(Destination.class);
+
         resourceVersion("v1");
     }
 

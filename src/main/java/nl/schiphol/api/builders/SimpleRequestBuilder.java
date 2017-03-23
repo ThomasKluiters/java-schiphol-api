@@ -9,12 +9,7 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class SimpleRequestBuilder<T, B extends RequestBuilder> extends RequestBuilder<T, B> {
-
-    /**
-     * The class to which the ObjectMapper maps the JSON to.
-     */
-    private Class<T> clazz;
+public abstract class SimpleRequestBuilder<T, B extends RequestBuilder> extends JsonRequestBuilder<T, B> {
 
     /**
      * Path to the API endpoint.
@@ -29,22 +24,10 @@ public abstract class SimpleRequestBuilder<T, B extends RequestBuilder> extends 
      * @param resourceVersion the resource version to use.
      */
     public SimpleRequestBuilder(Class<T> clazz, String path, String resourceVersion) {
-        this.clazz = clazz;
+        super(clazz);
         this.path = path;
 
         this.resourceVersion(resourceVersion);
-    }
-
-
-    @Override
-    protected T process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, clazz);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override

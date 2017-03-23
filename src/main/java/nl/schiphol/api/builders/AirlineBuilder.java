@@ -8,12 +8,18 @@ import java.io.InputStream;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
+public class AirlineBuilder extends JsonRequestBuilder<Airline, AirlineBuilder> {
 
     /**
       * The IATA / ICAO code of the airline.
      */
     private String airlineCode;
+
+    public AirlineBuilder() {
+        super(Airline.class);
+
+        this.resourceVersion("v1");
+    }
 
 
     /**
@@ -29,11 +35,6 @@ public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
     @Override
     protected AirlineBuilder getThis() {
         return this;
-    }
-
-    @Override
-    protected Airline process(InputStream is) {
-        return null;
     }
 
     @Override

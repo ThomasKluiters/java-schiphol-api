@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
+public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> {
 
     private final String[] VALID_SORT_FIELDS = {
         "flightname",
@@ -105,6 +105,12 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
                     throw new RuntimeException();
             }
         }
+    }
+
+    public FlightsBuilder() {
+        super(Flights.class);
+
+        resourceVersion("v3");
     }
 
     /**
@@ -334,17 +340,6 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
     @Override
     protected FlightsBuilder getThis() {
         return this;
-    }
-
-    @Override
-    protected Flights process(InputStream is) {
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            return mapper.readValue(is, Flights.class);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     LocalDate getScheduleDate() {
