@@ -10,6 +10,17 @@ A wrapper for the Schiphol API written in Java
 
 ## Usage
 
+### Installing
+
+Using maven
+
+```xml
+<dependency>
+      <groupId>com.github.ThomasKluiters</groupId>
+      <artifactId>java-schiphol-api</artifactId>
+</dependency>
+```
+
 ### List Flights
 
 ```Java
