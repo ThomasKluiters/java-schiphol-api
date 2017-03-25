@@ -1,14 +1,10 @@
 package nl.schiphol.api.builders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.schiphol.api.builders.flights.Flights;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,6 +26,8 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     private String appKey;
 
     private SortBuilder sort;
+
+    private HttpClient httpClient;
 
     /**
      * Page number.
@@ -58,6 +56,11 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
 
     public B sort(final SortBuilder sort) {
         this.sort = sort;
+        return getThis();
+    }
+
+    public B withClient(final HttpClient httpClient) {
+        this.httpClient = httpClient;
         return getThis();
     }
 
@@ -92,12 +95,12 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
              get.addHeader("Accept", "application/json");
              get.addHeader("ResourceVersion", getResourceVersion());
 
-             final CloseableHttpClient client = HttpClients.createDefault();
-             CloseableHttpResponse response = client.execute(get);
+             HttpClient client = getHttpClient();
+             HttpResponse response = client.execute(get);
 
              final InputStream is = response.getEntity().getContent();
              T result = process(is);
-             HttpClientUtils.closeQuietly(client);
+             HttpClientUtils.closeQuietly(response);
              return result;
          } catch (IOException | URISyntaxException e) {
              e.printStackTrace();
@@ -110,6 +113,10 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     protected abstract T process(InputStream is);
 
     protected abstract void prepare(URIBuilder builder);
+
+    HttpClient getHttpClient() {
+        return httpClient;
+    }
 
     String getResourceVersion() {
         return resourceVersion;

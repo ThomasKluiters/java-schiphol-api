@@ -1,9 +1,7 @@
 package nl.schiphol.api.builders;
 
-import nl.schiphol.api.builders.airlines.Airline;
+import nl.schiphol.api.models.airlines.Airline;
 import org.apache.http.client.utils.URIBuilder;
-
-import java.io.InputStream;
 
 /**
  * Created by Thomas on 22-3-2017.

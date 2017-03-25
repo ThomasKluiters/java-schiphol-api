@@ -1,6 +1,6 @@
 package nl.schiphol.api.builders;
 
-import nl.schiphol.api.builders.aircraft.AircraftTypes;
+import nl.schiphol.api.models.aircraft.AircraftTypes;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nonnull;

@@ -1,0 +1,103 @@
+{
+  "flights": [
+    {
+      "id": 121412366377810700,
+      "flightName": "KL2630",
+      "scheduleDate": "2017-03-23",
+      "flightDirection": "A",
+      "flightNumber": 2630,
+      "prefixIATA": "KL",
+      "prefixICAO": "KLM",
+      "scheduleTime": "00:15:00",
+      "serviceType": "J",
+      "mainFlight": "HV6674",
+      "codeshares": {
+        "codeshares": [
+          "KL2630"
+        ]
+      },
+      "estimatedLandingTime": "2017-03-22T23:38:17.000+01:00",
+      "actualLandingTime": "2017-03-22T23:38:25.000+01:00",
+      "publicEstimatedOffBlockTime": null,
+      "actualOffBlockTime": null,
+      "publicFlightState": {
+        "flightStates": [
+          "ARR",
+          "EXP"
+        ]
+      },
+      "route": {
+        "destinations": [
+          "TFS"
+        ]
+      },
+      "terminal": 1,
+      "gate": "C11",
+      "baggageClaim": {
+        "belts": [
+          "2"
+        ]
+      },
+      "expectedTimeOnBelt": "2017-03-23T00:14:56.636+01:00",
+      "checkinAllocations": {
+        "checkinAllocations": [
+          {
+            "startTime": "2017-03-22T23:25:00.000+01:00",
+            "endTime": "2017-03-23T01:25:00.000+01:00",
+            "rows": {
+              "rows": [
+                {
+                  "position": "31",
+                  "desks": {
+                    "desks": [
+                      {
+                        "position": 1,
+                        "checkinClass": {
+                          "code": "B",
+                          "description": "Baggage drop-off"
+                        }
+                      },
+                      {
+                        "position": 2,
+                        "checkinClass": {
+                          "code": "Y",
+                          "description": "Economy Class"
+                        }
+                      },
+                      {
+                        "position": 3,
+                        "checkinClass": {
+                          "code": "Y",
+                          "description": "Economy Class"
+                        }
+                      },
+                      {
+                        "position": 4,
+                        "checkinClass": {
+                          "code": "Y",
+                          "description": "Economy Class"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "remarks": null
+      },
+      "transferPositions": null,
+      "aircraftType": {
+        "iatamain": "73H",
+        "iatasub": "73H"
+      },
+      "aircraftRegistration": "PHHXB",
+      "airlineCode": 100,
+      "expectedTimeGateOpen": null,
+      "expectedTimeBoarding": null,
+      "expectedTimeGateClosing": null,
+      "schemaVersion": "3"
+    }
+],
+  "schemaVersion": "3"}

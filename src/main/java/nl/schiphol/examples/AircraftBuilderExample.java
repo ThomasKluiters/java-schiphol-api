@@ -3,12 +3,8 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
-import nl.schiphol.api.builders.SortBuilder;
-import nl.schiphol.api.builders.aircraft.AircraftType;
-import nl.schiphol.api.builders.aircraft.AircraftTypes;
-import nl.schiphol.api.builders.flights.Flights;
-
-import java.time.LocalDate;
+import nl.schiphol.api.models.aircraft.AircraftType;
+import nl.schiphol.api.models.aircraft.AircraftTypes;
 
 /**
  * Created by Thomas on 22-3-2017.

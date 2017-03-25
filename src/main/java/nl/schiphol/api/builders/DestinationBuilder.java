@@ -1,6 +1,6 @@
 package nl.schiphol.api.builders;
 
-import nl.schiphol.api.builders.destinations.Destination;
+import nl.schiphol.api.models.destinations.Destination;
 import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nonnull;

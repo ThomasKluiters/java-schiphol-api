@@ -4,8 +4,8 @@ import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
 import nl.schiphol.api.builders.SortBuilder;
-import nl.schiphol.api.builders.destinations.Destination;
-import nl.schiphol.api.builders.destinations.Destinations;
+import nl.schiphol.api.models.destinations.Destination;
+import nl.schiphol.api.models.destinations.Destinations;
 
 /**
  * Created by Thomas on 22-3-2017.

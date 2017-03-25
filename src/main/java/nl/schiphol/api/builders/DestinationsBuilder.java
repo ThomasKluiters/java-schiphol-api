@@ -1,6 +1,6 @@
 package nl.schiphol.api.builders;
 
-import nl.schiphol.api.builders.destinations.Destinations;
+import nl.schiphol.api.models.destinations.Destinations;
 
 /**
  * Created by Thomas on 22-3-2017.
