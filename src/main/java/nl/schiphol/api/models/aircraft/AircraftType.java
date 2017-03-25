@@ -1,4 +1,4 @@
-package nl.schiphol.api.builders.aircraft;
+package nl.schiphol.api.models.aircraft;
 
 /**
  * Created by Thomas on 22-3-2017.

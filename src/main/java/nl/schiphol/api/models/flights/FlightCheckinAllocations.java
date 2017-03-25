@@ -1,6 +1,4 @@
-package nl.schiphol.api.builders.flights;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+package nl.schiphol.api.models.flights;
 
 /**
  * Created by Thomas on 22-3-2017.

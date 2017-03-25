@@ -3,8 +3,7 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
-import nl.schiphol.api.builders.flights.Flight;
-import nl.schiphol.api.builders.flights.Flights;
+import nl.schiphol.api.models.flights.Flights;
 import nl.schiphol.api.builders.SortBuilder;
 
 import java.time.LocalDate;

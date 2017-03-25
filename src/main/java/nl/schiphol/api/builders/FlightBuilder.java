@@ -1,11 +1,7 @@
 package nl.schiphol.api.builders;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.schiphol.api.builders.flights.Flight;
+import nl.schiphol.api.models.flights.Flight;
 import org.apache.http.client.utils.URIBuilder;
-
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * Created by Thomas on 22-3-2017.
