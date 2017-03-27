@@ -9,8 +9,7 @@ public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
 
     public AirlineBuilder() {
         super(Airline.class, "/public-flights/airline/{airlineCode}");
-
-        this.resourceVersion("v1");
+        resourceVersion("v1");
     }
 
     /**

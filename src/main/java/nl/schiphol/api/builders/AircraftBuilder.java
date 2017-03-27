@@ -11,8 +11,7 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes, AircraftBuild
 
     public AircraftBuilder() {
         super(AircraftTypes.class, "/public-flights/aircrafttypes");
-
-        this.resourceVersion("v1");
+        resourceVersion("v1");
     }
 
     /**

@@ -8,7 +8,7 @@ public class RequiredHeaderException extends RuntimeException {
     private final String name;
 
     public RequiredHeaderException(String name) {
-        super(String.format("Required header %s has not been supplied!", name));
+        super(String.format("The required header '%s' must be supplied.", name));
 
         this.name = name;
     }

@@ -87,6 +87,7 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
                 final String pathParameterValue = pathParameter.getValue();
                 path = path.replace("{" + pathParameterName + "}", pathParameterValue);
             }
+            path = path.replaceAll("\\{.+}", "");
         }
 
         URIBuilder builder = new URIBuilder()
@@ -116,7 +117,9 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     }
 
     protected boolean hasHeader(final String name) {
-        for (Header header : headers) {
+        if(headers == null) return false;
+
+        for (Header header : getHeaders()) {
             if(header.getName().equals(name)) {
                 return true;
             }
@@ -125,7 +128,9 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     }
 
     protected boolean hasParameter(final String name) {
-        for (NameValuePair parameter: parameters) {
+        if(parameters == null) return false;
+
+        for (NameValuePair parameter: getParameters()) {
             if(parameter.getName().equals(name)) {
                 return true;
             }
@@ -148,11 +153,16 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     }
 
     protected void addPathParameter(final String name, final String value) {
+        addPathParameter(name, null, value);
+    }
+
+    protected void addPathParameter(final String name, final String extra, final String value) {
         final List<NameValuePair> pathParameters = getPathParameters();
 
         pathParameters.removeIf(parameter -> parameter.getName().equals(name));
-        pathParameters.add(new BasicNameValuePair(name, value));
+        pathParameters.add(new BasicNameValuePair(name, (extra == null ? "" : extra + "/") + value));
     }
+
 
     public List<NameValuePair> getParameters() {
         if(parameters == null) {

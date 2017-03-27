@@ -8,7 +8,7 @@ public class RequiredParameterException extends RuntimeException {
     private final String name;
 
     public RequiredParameterException(String name) {
-        super(String.format("Required parameter %s has not been supplied!", name));
+        super(String.format("The required parameter '%s' must be supplied.", name));
 
         this.name = name;
     }

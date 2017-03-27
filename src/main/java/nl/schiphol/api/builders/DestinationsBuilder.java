@@ -9,6 +9,7 @@ public class DestinationsBuilder extends RequestBuilder<Destinations, Destinatio
 
     public DestinationsBuilder() {
         super(Destinations.class, "/public-flights/destinations");
+        resourceVersion("v1");
     }
 
     @Override
