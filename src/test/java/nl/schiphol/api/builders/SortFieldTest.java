@@ -2,6 +2,8 @@ package nl.schiphol.api.builders;
 
 import org.junit.Test;
 
+import nl.schiphol.api.builders.SortBuilder.SortField;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 

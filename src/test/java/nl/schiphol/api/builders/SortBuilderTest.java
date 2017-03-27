@@ -1,6 +1,6 @@
 package nl.schiphol.api.builders;
 
-import com.google.common.base.Joiner;
+import nl.schiphol.api.builders.SortBuilder.SortField;
 import org.junit.Test;
 
 import java.util.ArrayList;
