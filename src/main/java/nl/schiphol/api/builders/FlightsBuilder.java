@@ -131,7 +131,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param direction the FlightDirection of the flight.
      */
     public FlightsBuilder direction(@Nonnull final FlightDirection direction) {
-        addParameter("flightdireection", direction.toString());
+        addParameter("flightdirection", direction.toString());
         return this;
     }
 

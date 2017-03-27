@@ -1,6 +1,8 @@
 package nl.schiphol.api.builders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
+import nl.schiphol.api.builders.exceptions.RequiredParameterException;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -26,6 +28,8 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     private final Class<T> mappedClass;
 
     private final String endpoint;
+
+    private List<NameValuePair> pathParameters;
 
     private List<NameValuePair> parameters;
 
@@ -67,11 +71,6 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     }
 
     public T execute() {
-        URIBuilder builder = new URIBuilder()
-                .setScheme("https")
-                .setHost("api.schiphol.nl")
-                .setPath(getEndpoint());
-
         for (String requiredHeaderName : requiredHeaders()) {
             if(!hasHeader(requiredHeaderName)) throw new RequiredHeaderException(requiredHeaderName);
         }
@@ -80,7 +79,21 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
             if(!hasParameter(requiredParameterName)) throw new RequiredParameterException(requiredParameterName);
         }
 
-        builder.addParameters(getParameters());
+        String path = getEndpoint();
+
+        if(pathParameters != null) {
+            for (NameValuePair pathParameter : getPathParameters()) {
+                final String pathParameterName = pathParameter.getName();
+                final String pathParameterValue = pathParameter.getValue();
+                path = path.replace("{" + pathParameterName + "}", pathParameterValue);
+            }
+        }
+
+        URIBuilder builder = new URIBuilder()
+                .setScheme("https")
+                .setHost("api.schiphol.nl")
+            .addParameters(getParameters())
+            .setPath(path);
 
         InputStream src = null;
         try {
@@ -121,12 +134,24 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     }
 
     protected void addParameter(final String name, final String value) {
-        getParameters().add(new BasicNameValuePair(name, value));
+        final List<NameValuePair> parameters = getParameters();
+
+        parameters.removeIf(parameter -> parameter.getName().equals(name));
+        parameters.add(new BasicNameValuePair(name, value));
     }
 
     protected void addHeader(final String name, final String value) {
-        getHeaders().add(new BasicHeader(name, value) {
-        });
+        final List<Header> headers = getHeaders();
+
+        headers.removeIf(header -> header.getName().equals(name));
+        headers.add(new BasicHeader(name, value));
+    }
+
+    protected void addPathParameter(final String name, final String value) {
+        final List<NameValuePair> pathParameters = getPathParameters();
+
+        pathParameters.removeIf(parameter -> parameter.getName().equals(name));
+        pathParameters.add(new BasicNameValuePair(name, value));
     }
 
     public List<NameValuePair> getParameters() {
@@ -141,6 +166,40 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
             headers = new ArrayList<>();
         }
         return headers;
+    }
+
+    public List<NameValuePair> getPathParameters() {
+        if(pathParameters == null) {
+            pathParameters = new ArrayList<>();
+        }
+        return pathParameters;
+    }
+
+    String getPathParameter(final String name) {
+        for (NameValuePair parameter : pathParameters) {
+            if(parameter.getName().equals(name)) {
+                return parameter.getValue();
+            }
+        }
+        return null;
+    }
+
+    String getHeader(final String name) {
+        for (Header header : getHeaders()) {
+            if(header.getName().equals(name)) {
+                return header.getValue();
+            }
+        }
+        return null;
+    }
+
+    String getParameter(final String name) {
+        for (NameValuePair parameter : getParameters()) {
+            if(parameter.getName().equals(name)) {
+                return parameter.getValue();
+            }
+        }
+        return null;
     }
 
     protected String[] requiredParameters() {

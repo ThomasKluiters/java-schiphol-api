@@ -1,4 +1,4 @@
-package nl.schiphol.api.builders;
+package nl.schiphol.api.builders.exceptions;
 
 /**
  * Created by Thomas on 27-3-2017.

@@ -1,24 +1,17 @@
 package nl.schiphol.api.builders;
 
 import nl.schiphol.api.models.airlines.Airline;
-import org.apache.http.client.utils.URIBuilder;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AirlineBuilder extends JsonRequestBuilder<Airline, AirlineBuilder> {
-
-    /**
-      * The IATA / ICAO code of the airline.
-     */
-    private String airlineCode;
+public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
 
     public AirlineBuilder() {
-        super(Airline.class);
+        super(Airline.class, "/public-flights/airline/{airlineCode}");
 
         this.resourceVersion("v1");
     }
-
 
     /**
      * Search for an airline with the given airline code.
@@ -26,7 +19,7 @@ public class AirlineBuilder extends JsonRequestBuilder<Airline, AirlineBuilder> 
      * @param airlineCode the IATAO / ICAO code of the airline.
      */
     public AirlineBuilder airlineCode(String airlineCode) {
-        this.airlineCode = airlineCode;
+        addPathParameter("airlineCode", airlineCode);
         return this;
     }
 
@@ -35,16 +28,4 @@ public class AirlineBuilder extends JsonRequestBuilder<Airline, AirlineBuilder> 
         return this;
     }
 
-    @Override
-    protected void prepare(URIBuilder builder) {
-        if(getAirlineCode() == null) {
-            throw new IllegalArgumentException();
-        }
-
-        builder.setPath("/public-flights/destinations" + "/" + getAirlineCode());
-    }
-
-    String getAirlineCode() {
-        return airlineCode;
-    }
 }
