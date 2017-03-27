@@ -3,10 +3,12 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
+import nl.schiphol.api.models.flights.Flight;
 import nl.schiphol.api.models.flights.Flights;
 import nl.schiphol.api.builders.SortBuilder;
 
 import java.time.LocalDate;
+import java.util.Arrays;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -27,7 +29,7 @@ public class FlightsBuilderExample {
         LocalDate toDate = LocalDate.now().plusWeeks(1);
 
         // search for all KL flights, departing between today and a week
-        Flights result = schiphol.flights()
+        Flights flights = schiphol.flights()
                 .from(fromDate)
                 .to(toDate)
                 .airline("KL")
@@ -35,7 +37,10 @@ public class FlightsBuilderExample {
                 .page(0)
                 .sort(sort)
                 .execute();
-        
+
+        for (Flight flight : flights) {
+            System.out.println(flight.getFlightName());
+        }
     }
 
 }

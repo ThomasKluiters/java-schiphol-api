@@ -26,7 +26,7 @@ public class DestinationBuilderExample {
                 .sort(sortBuilder)
                 .execute();
 
-        for (Destination destination : destinations.getDestinations()) {
+        for (Destination destination : destinations) {
             System.out.println(destination.getPublicName().getDutch());
         }
     }
