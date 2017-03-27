@@ -2,7 +2,9 @@ package nl.schiphol.api.builders;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
+import org.apache.http.message.BasicStatusLine;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,8 +63,16 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
         HttpEntity mockedHttpEntity = mock(HttpEntity.class);
 
+        StatusLine mockedStatusLine = mock(StatusLine.class);
+
         when(mockedHttpClient.execute(any()))
                 .thenReturn(mockedHttpResponse);
+
+        when(mockedHttpResponse.getStatusLine())
+                .thenReturn(mockedStatusLine);
+
+        when(mockedStatusLine.getStatusCode())
+                .thenReturn(200);
 
         when(mockedHttpResponse.getEntity())
                 .thenReturn(mockedHttpEntity);

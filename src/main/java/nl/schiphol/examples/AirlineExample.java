@@ -18,7 +18,7 @@ public class AirlineExample {
         Airlines airlines = schiphol.airlines().execute();
 
         for (Airline airline : airlines) {
-            System.out.println(airline.getPublicName());
+            System.out.println(airline.getIata());
         }
     }
 

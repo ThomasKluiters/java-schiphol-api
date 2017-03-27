@@ -3,25 +3,39 @@ package nl.schiphol.api.builders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
-import org.apache.http.Header;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import nl.schiphol.api.models.Response;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder<T, B extends RequestBuilder> {
+public abstract class RequestBuilder<T extends Response<T>, B extends RequestBuilder> {
+
+    private final Pattern pattern = Pattern.compile("<(.+)>; rel=\"(.+)\"");
+
+    private static final String FIRST = "first";
+
+    private static final String NEXT = "next";
+
+    private static final String LAST = "last";
+
+    private static final String PREVIOUS = "prev";
 
     private HttpClient httpClient;
 
@@ -70,6 +84,63 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
         return getThis();
     }
 
+    public T executeRaw(String uri) {
+        try {
+            return executeRaw(new URI(uri));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public T executeRaw(URI uri) {
+        InputStream src = null;
+        try {
+            HttpGet get = new HttpGet(uri);
+            for (Header header : headers) get.addHeader(header);
+            HttpResponse response = getHttpClient().execute(get);
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                src = response.getEntity().getContent();
+                T object = new ObjectMapper().readValue(src, getMappedClass());
+                if(response.getHeaders("Link") != null) {
+                    for (Header link : response.getHeaders("Link")) {
+                        for (String value : link.getValue().split(", ")) {
+                            Matcher matcher = pattern.matcher(value);
+                            if (matcher.find()) {
+                                String url = matcher.group(1);
+                                String position = matcher.group(2);
+
+                                if (FIRST.equals(position))
+                                    object.setFirst(url);
+                                else if (LAST.equals(position))
+                                    object.setLast(url);
+                                else if (PREVIOUS.equals(position))
+                                    object.setPrevious(url);
+                                else if (NEXT.equals(position))
+                                    object.setNext(url);
+                            }
+                        }
+                    }
+                }
+                object.setBuilder(this);
+                return object;
+            } else {
+                System.err.println(response);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(src != null) src.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
     public T execute() {
         for (String requiredHeaderName : requiredHeaders()) {
             if(!hasHeader(requiredHeaderName)) throw new RequiredHeaderException(requiredHeaderName);
@@ -93,24 +164,14 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
                 .setHost("api.schiphol.nl")
+                .setPort(443)
             .addParameters(getParameters())
             .setPath(path);
 
-        InputStream src = null;
         try {
-            HttpGet get = new HttpGet(builder.build());
-            for (Header header : headers) get.addHeader(header);
-            HttpResponse response = getHttpClient().execute(get);
-            src = response.getEntity().getContent();
-            return new ObjectMapper().readValue(src, getMappedClass());
-        } catch (URISyntaxException | IOException e) {
+            return executeRaw(builder.build());
+        } catch (URISyntaxException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if(src != null) src.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         return null;
