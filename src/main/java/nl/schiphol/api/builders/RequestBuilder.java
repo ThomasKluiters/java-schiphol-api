@@ -4,15 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
 import nl.schiphol.api.models.Response;
-import org.apache.http.Header;
-import org.apache.http.HeaderElement;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
+import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,29 +99,35 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
             HttpGet get = new HttpGet(uri);
             for (Header header : headers) get.addHeader(header);
             HttpResponse response = getHttpClient().execute(get);
-            src = response.getEntity().getContent();
-            T object = new ObjectMapper().readValue(src, getMappedClass());
-            for (Header link : response.getHeaders("Link")) {
-                for (String value : link.getValue().split(", ")) {
-                    Matcher matcher = pattern.matcher(value);
-                    if(matcher.find()) {
-                        String url = matcher.group(1);
-                        String position = matcher.group(2);
+            if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                src = response.getEntity().getContent();
+                T object = new ObjectMapper().readValue(src, getMappedClass());
+                if(response.getHeaders("Link") != null) {
+                    for (Header link : response.getHeaders("Link")) {
+                        for (String value : link.getValue().split(", ")) {
+                            Matcher matcher = pattern.matcher(value);
+                            if (matcher.find()) {
+                                String url = matcher.group(1);
+                                String position = matcher.group(2);
 
-                        if(FIRST.equals(position))
-                            object.setFirst(url);
-                        else if(LAST.equals(position))
-                            object.setLast(url);
-                        else if(PREVIOUS.equals(position))
-                            object.setPrevious(url);
-                        else if(NEXT.equals(position))
-                            object.setNext(url);
+                                if (FIRST.equals(position))
+                                    object.setFirst(url);
+                                else if (LAST.equals(position))
+                                    object.setLast(url);
+                                else if (PREVIOUS.equals(position))
+                                    object.setPrevious(url);
+                                else if (NEXT.equals(position))
+                                    object.setNext(url);
+                            }
+                        }
                     }
                 }
+                object.setBuilder(this);
+                return object;
+            } else {
+                System.err.println(response);
             }
 
-            object.setBuilder(this);
-            return object;
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

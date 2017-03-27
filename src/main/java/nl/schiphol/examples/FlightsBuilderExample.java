@@ -32,7 +32,7 @@ public class FlightsBuilderExample {
         Flights flights = schiphol.flights()
                 .from(fromDate)
                 .to(toDate)
-                .airline("KL")
+                .airline("K L")
                 .direction("D")
                 .page(0)
                 .sort(sort)
