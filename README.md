@@ -3,8 +3,6 @@ A wrapper for the Schiphol API written in Java
 
 ## TODO
 
-- implement pagination
-- refactor Builders
 - test thoroughly
 - verify sorting parameters
 
@@ -81,5 +79,27 @@ Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
 Destination destination = schiphol.destination()
         .iata("AMS")
     .execute();
+```
+
+### Iteration
+
+```Java
+Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
+Airlines airlines = schiphol.airlines().execute();
+
+for(Airline airline : airlines) {
+      System.out.println(airline.getPublicName());
+}
+```
+
+### Pagination
+
+```Java
+Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
+Airlines airlines = schiphol.airlines().execute();
+
+if(airlines.hasNext()) {
+      airlines = airlines.next();
+}
 ```
 
