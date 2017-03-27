@@ -77,6 +77,10 @@ public class Schiphol {
                 .withClient(httpClient);
     }
 
+    public AirlineBuilder airline() {return prepare(new AirlineBuilder()); }
+
+    public AirlinesBuilder airlines() { return prepare(new AirlinesBuilder()); }
+
     public FlightsBuilder flights() {
         return prepare(new FlightsBuilder());
     }
