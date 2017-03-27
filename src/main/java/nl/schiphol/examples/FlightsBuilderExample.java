@@ -38,9 +38,8 @@ public class FlightsBuilderExample {
                 .sort(sort)
                 .execute();
 
-        for (Flight flight : flights) {
-            System.out.println(flight.getFlightName());
-        }
+        System.out.println(flights.hasNext());
+        System.out.println(flights.next().hasPrevious());
     }
 
 }

@@ -19,12 +19,17 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
 public abstract class RequestBuilder<T extends Response<T>, B extends RequestBuilder> {
+
+    private final Pattern pattern = Pattern.compile("<(.+)>; rel=\"(.+)\"");
 
     private static final String FIRST = "first";
 
@@ -32,7 +37,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
     private static final String LAST = "last";
 
-    private static final String PREVIOUS = "previous";
+    private static final String PREVIOUS = "prev";
 
     private HttpClient httpClient;
 
@@ -99,19 +104,21 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
             src = response.getEntity().getContent();
             T object = new ObjectMapper().readValue(src, getMappedClass());
             for (Header link : response.getHeaders("Link")) {
-                for (HeaderElement element : link.getElements()) {
-                    String position = element.getParameter(0).getValue();
-                    String url = element.getName() + "=" + element.getValue();
-                    url = url.replaceAll("([<>])", "");
+                for (String value : link.getValue().split(", ")) {
+                    Matcher matcher = pattern.matcher(value);
+                    if(matcher.find()) {
+                        String url = matcher.group(1);
+                        String position = matcher.group(2);
 
-                    if(FIRST.equals(position))
-                        object.setFirst(url);
-                    else if(LAST.equals(position))
-                        object.setLast(url);
-                    else if(PREVIOUS.equals(position))
-                        object.setPrevious(url);
-                    else if(NEXT.equals(position))
-                        object.setNext(url);
+                        if(FIRST.equals(position))
+                            object.setFirst(url);
+                        else if(LAST.equals(position))
+                            object.setLast(url);
+                        else if(PREVIOUS.equals(position))
+                            object.setPrevious(url);
+                        else if(NEXT.equals(position))
+                            object.setNext(url);
+                    }
                 }
             }
 
