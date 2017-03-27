@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
@@ -27,12 +25,15 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
 
     private final Class<T> mappedClass;
 
+    private final String endpoint;
+
     private List<NameValuePair> parameters;
 
     private List<Header> headers;
 
-    public RequestBuilder(final Class<T> mappedClass) {
+    public RequestBuilder(final Class<T> mappedClass, String endpoint) {
         this.mappedClass = mappedClass;
+        this.endpoint = endpoint;
     }
 
     public B appId(final String appId) {
@@ -68,7 +69,8 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
     public T execute() {
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
-                .setHost("api.schiphol.nl");
+                .setHost("api.schiphol.nl")
+                .setPath(getEndpoint());
 
         for (String requiredHeaderName : requiredHeaders()) {
             if(!hasHeader(requiredHeaderName)) throw new RequiredHeaderException(requiredHeaderName);
@@ -136,7 +138,7 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
 
     public List<Header> getHeaders() {
         if(headers == null) {
-            headers = new ArrayList<org.apache.http.Header>();
+            headers = new ArrayList<>();
         }
         return headers;
     }
@@ -155,6 +157,10 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
 
     public Class<T> getMappedClass() {
         return mappedClass;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
     }
 
     protected abstract B getThis();

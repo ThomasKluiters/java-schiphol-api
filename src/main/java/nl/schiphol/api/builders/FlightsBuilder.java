@@ -1,7 +1,6 @@
 package nl.schiphol.api.builders;
 
 import nl.schiphol.api.models.flights.Flights;
-import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nonnull;
 import java.time.LocalDate;
@@ -12,19 +11,6 @@ import java.time.format.DateTimeFormatter;
  * Created by Thomas on 22-3-2017.
  */
 public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
-
-    private final String[] VALID_SORT_FIELDS = {
-        "flightname",
-        "scheduledate",
-        "scheduletime",
-        "flightdirection" ,
-        "mainflight",
-        "codeshare",
-        "airline",
-        "nvlscode",
-        "destination",
-        "id"
-    };
 
     /**
      * The format for the scheduled date.
@@ -53,9 +39,9 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
         }
     }
 
-
     public FlightsBuilder() {
-        super(Flights.class);
+        super(Flights.class, "/public-flights/flights");
+        resourceVersion("v3");
     }
 
     /**

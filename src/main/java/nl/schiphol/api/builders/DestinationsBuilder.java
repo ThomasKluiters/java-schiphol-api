@@ -5,9 +5,10 @@ import nl.schiphol.api.models.destinations.Destinations;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class DestinationsBuilder extends SimpleRequestBuilder<Destinations, DestinationsBuilder> {
+public class DestinationsBuilder extends RequestBuilder<Destinations, DestinationsBuilder> {
+
     public DestinationsBuilder() {
-        super(Destinations.class, "/public-flights/destinations", "v1");
+        super(Destinations.class, "/public-flights/destinations");
     }
 
     @Override
