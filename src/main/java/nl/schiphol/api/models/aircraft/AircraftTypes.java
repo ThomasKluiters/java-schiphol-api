@@ -1,21 +1,33 @@
 package nl.schiphol.api.models.aircraft;
 
+import javax.annotation.Nonnull;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftTypes {
+public class AircraftTypes implements Iterable<AircraftType> {
 
-    private AircraftType[] aircraftTypes;
+    private List<AircraftType> aircraftTypes;
 
     private String schemaVersion;
 
     AircraftTypes() { }
 
-    public AircraftType[] getAircraftTypes() {
+    @Nonnull
+    public List<AircraftType> getAircraftTypes() {
         return aircraftTypes;
     }
 
+    @Nonnull
     public String getSchemaVersion() {
         return schemaVersion;
+    }
+
+    @Nonnull
+    @Override
+    public Iterator<AircraftType> iterator() {
+        return getAircraftTypes().iterator();
     }
 }

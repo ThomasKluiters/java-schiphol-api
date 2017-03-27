@@ -5,9 +5,10 @@ import nl.schiphol.api.models.airlines.Airlines;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AirlinesBuilder extends SimpleRequestBuilder<Airlines, AirlinesBuilder> {
+public class AirlinesBuilder extends RequestBuilder<Airlines, AirlinesBuilder> {
     public AirlinesBuilder() {
-        super(Airlines.class, "/public-flights/airlines", "v1");
+        super(Airlines.class, "/public-flights/airlines");
+        resourceVersion("v1");
     }
 
     @Override

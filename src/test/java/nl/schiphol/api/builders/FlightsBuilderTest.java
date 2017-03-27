@@ -3,14 +3,8 @@ package nl.schiphol.api.builders;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.ArgumentMatcher;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -21,7 +15,6 @@ import java.time.LocalTime;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Matchers.booleanThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -82,7 +75,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
     public void notIncludeDelayedTest() {
         FlightsBuilder builder = new FlightsBuilder();
 
-        assertEquals(false, builder.isIncludeDelays());
+        assertEquals(null, builder.getParameter("includedelays"));
     }
 
     @Test
@@ -90,7 +83,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.includeDelayed();
 
-        assertEquals(true, builder.isIncludeDelays());
+        assertEquals(true, Boolean.valueOf(builder.getParameter("includedelays")));
     }
 
     @Test
@@ -107,7 +100,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.scheduleDate(rawTestDate);
 
-        assertEquals(testDate, builder.getScheduleDate());
+        assertEquals(rawTestDate, builder.getParameter("scheduledate"));
     }
 
     @Test
@@ -115,7 +108,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.scheduleDate(testDate);
 
-        assertEquals(testDate, builder.getScheduleDate());
+        assertEquals(rawTestDate, builder.getParameter("scheduledate"));
     }
 
     @Test
@@ -132,7 +125,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.scheduleTime(rawTestTime);
 
-        assertEquals(testTime, builder.getScheduleTime());
+        assertEquals(rawTestTime, builder.getParameter("scheduletime"));
     }
 
 
@@ -141,7 +134,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.scheduleTime(testTime);
 
-        assertEquals(testTime, builder.getScheduleTime());
+        assertEquals(rawTestTime, builder.getParameter("scheduletime"));
     }
 
     @Test
@@ -158,7 +151,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.direction('A');
 
-        assertEquals(FlightsBuilder.FlightDirection.ARRIVING, builder.getFlightDirection());
+        assertEquals("A", builder.getParameter("flightdirection"));
     }
 
     @Test
@@ -166,7 +159,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.direction('D');
 
-        assertEquals(FlightsBuilder.FlightDirection.DEPARTING, builder.getFlightDirection());
+        assertEquals("D", builder.getParameter("flightdirection"));
     }
 
     @Test
@@ -174,7 +167,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.direction("A");
 
-        assertEquals(FlightsBuilder.FlightDirection.ARRIVING, builder.getFlightDirection());
+        assertEquals("A", builder.getParameter("flightdirection"));
     }
 
     @Test
@@ -182,7 +175,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.direction("D");
 
-        assertEquals(FlightsBuilder.FlightDirection.DEPARTING, builder.getFlightDirection());
+        assertEquals("D", builder.getParameter("flightdirection"));
     }
 
     @Test
@@ -190,7 +183,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.direction(FlightsBuilder.FlightDirection.DEPARTING);
 
-        assertEquals(FlightsBuilder.FlightDirection.DEPARTING, builder.getFlightDirection());
+        assertEquals("D", builder.getParameter("flightdirection"));
     }
 
     @Test
@@ -208,7 +201,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.from(rawTestDate);
 
-        assertEquals(testDate, builder.getFromDate());
+        assertEquals(rawTestDate, builder.getParameter("fromdate"));
     }
 
     @Test
@@ -216,7 +209,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.from(testDate);
 
-        assertEquals(testDate, builder.getFromDate());
+        assertEquals(rawTestDate, builder.getParameter("fromdate"));
     }
 
     @Test
@@ -233,7 +226,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.to("2017-04-22");
 
-        assertEquals(testDate, builder.getToDate());
+        assertEquals(rawTestDate, builder.getParameter("todate"));
     }
 
     @Test
@@ -241,7 +234,7 @@ public class FlightsBuilderTest extends RequestBuilderTest {
         FlightsBuilder builder = new FlightsBuilder();
         builder.to(testDate);
 
-        assertEquals(testDate, builder.getToDate());
+        assertEquals(rawTestDate, builder.getParameter("todate"));
     }
 
     @Test

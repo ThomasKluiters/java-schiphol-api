@@ -1,65 +1,35 @@
 package nl.schiphol.api.builders;
 
 import nl.schiphol.api.models.flights.Flight;
-import org.apache.http.client.utils.URIBuilder;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightBuilder extends JsonRequestBuilder<Flight, FlightBuilder> {
-
-    /**
-     * Id of the flight.
-     */
-    private Long id;
-
-    /**
-     * Name of the flight.
-     */
-    private String flightName;
+public class FlightBuilder extends RequestBuilder<Flight, FlightBuilder> {
 
     public FlightBuilder() {
-        super(Flight.class);
+        super(Flight.class, "/public-flights/flights/{id}{flightName}");
+        resourceVersion("v3");
+    }
 
-        resourceVersion("v1");
+    public FlightBuilder id(Integer id) {
+        addPathParameter("id", String.valueOf(id));
+        return this;
     }
 
     public FlightBuilder id(Long id) {
-        this.id = id;
+        addPathParameter("id", String.valueOf(id));
         return this;
     }
 
-    public FlightBuilder flightName(String flightName) {
-        this.flightName = flightName;
+    public FlightBuilder flightName(final String flightName) {
+        addPathParameter("flightName", "/codeshares", flightName);
         return this;
     }
+
 
     @Override
     protected FlightBuilder getThis() {
         return this;
-    }
-
-
-    @Override
-    protected void prepare(URIBuilder builder) {
-        if(getId() == null) {
-            throw new IllegalArgumentException();
-        }
-
-        StringBuilder path = new StringBuilder("/public-flights/flights/").append(getId());
-
-        if(getFlightName() != null) {
-            path.append("/codeshares/").append(getFlightName());
-        }
-
-        builder.setPath(path.toString());
-    }
-
-    Long getId() {
-        return id;
-    }
-
-    String getFlightName() {
-        return flightName;
     }
 }

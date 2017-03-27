@@ -18,8 +18,8 @@ public class AircraftBuilderExample {
 
         AircraftTypes types = schiphol.aircraft().execute();
 
-        for (AircraftType aircraftType : types.getAircraftTypes()) {
-            System.out.println(aircraftType.getLongDescription());
+        for (AircraftType type : types) {
+            System.out.println(type.getLongDescription());
         }
     }
 

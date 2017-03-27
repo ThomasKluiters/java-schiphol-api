@@ -1,23 +1,17 @@
 package nl.schiphol.api.builders;
 
 import nl.schiphol.api.models.destinations.Destination;
-import org.apache.http.client.utils.URIBuilder;
 
 import javax.annotation.Nonnull;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class DestinationBuilder extends JsonRequestBuilder<Destination, DestinationBuilder> {
+public class DestinationBuilder extends RequestBuilder<Destination, DestinationBuilder> {
 
-    /**
-     * IATA code.
-     */
-    private String iata;
 
     public DestinationBuilder() {
-        super(Destination.class);
-
+        super(Destination.class, "/public-flights/destinations/{iata}");
         resourceVersion("v1");
     }
 
@@ -27,7 +21,7 @@ public class DestinationBuilder extends JsonRequestBuilder<Destination, Destinat
      * @param iata IATA code.
      */
     public DestinationBuilder iata(@Nonnull final String iata) {
-        this.iata = iata;
+        addPathParameter("iata", iata);
         return this;
     }
 
@@ -36,15 +30,4 @@ public class DestinationBuilder extends JsonRequestBuilder<Destination, Destinat
         return this;
     }
 
-    @Override
-    protected void prepare(URIBuilder builder) {
-        if(getIata() == null) {
-            throw new IllegalArgumentException();
-        }
-        builder.setPath("/public-flights/destinations" + "/" + getIata());
-    }
-
-    String getIata() {
-        return iata;
-    }
 }

@@ -15,7 +15,7 @@ public abstract class RequestBuilderTest {
 
     private final Long testPage = 1l;
 
-    private final SortBuilder testSortBuilder = new SortBuilder(new SortField("test", true));
+    private final SortBuilder testSortBuilder = new SortBuilder(new SortBuilder.SortField("test", true));
 
     private final String testAppId = "testId";
 
@@ -31,7 +31,7 @@ public abstract class RequestBuilderTest {
         RequestBuilder builder = getInstance();
         builder.page(testPage);
 
-        assertEquals(testPage, builder.getPage());
+        assertEquals(testPage, Long.valueOf(builder.getParameter("page")));
     }
 
     @Test
@@ -39,7 +39,7 @@ public abstract class RequestBuilderTest {
         RequestBuilder builder = getInstance();
         builder.sort(testSortBuilder);
 
-        assertEquals(testSortBuilder.getFields(), builder.getSort().getFields());
+        assertEquals(testSortBuilder.toString(), builder.getParameter("sort"));
     }
 
     @Test
@@ -47,7 +47,7 @@ public abstract class RequestBuilderTest {
         RequestBuilder builder = getInstance();
         builder.appId(testAppId);
 
-        assertEquals(testAppId, builder.getAppId());
+        assertEquals(testAppId, builder.getParameter("app_id"));
     }
 
     @Test
@@ -55,7 +55,7 @@ public abstract class RequestBuilderTest {
         RequestBuilder builder = getInstance();
         builder.appKey(testAppKey);
 
-        assertEquals(testAppKey, builder.getAppKey());
+        assertEquals(testAppKey, builder.getParameter("app_key"));
     }
 
     @Test
@@ -63,7 +63,7 @@ public abstract class RequestBuilderTest {
         RequestBuilder builder = getInstance();
         builder.resourceVersion(testResourceVersion);
 
-        assertEquals(testResourceVersion, builder.getResourceVersion());
+        assertEquals(testResourceVersion, builder.getHeader("ResourceVersion"));
     }
 
     protected class URIMatcher extends ArgumentMatcher<HttpUriRequest> {
