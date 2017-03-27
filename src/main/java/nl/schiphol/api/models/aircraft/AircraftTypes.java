@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftTypes implements Iterable {
+public class AircraftTypes implements Iterable<AircraftType> {
 
     private List<AircraftType> aircraftTypes;
 
@@ -27,7 +27,7 @@ public class AircraftTypes implements Iterable {
 
     @Nonnull
     @Override
-    public Iterator iterator() {
+    public Iterator<AircraftType> iterator() {
         return getAircraftTypes().iterator();
     }
 }
