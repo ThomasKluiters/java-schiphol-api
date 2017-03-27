@@ -1,9 +1,11 @@
 package nl.schiphol.api.models.aircraft;
 
+import nl.schiphol.api.models.Response;
+
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftType {
+public class AircraftType extends Response<AircraftType> {
 
     private String longDescription;
 

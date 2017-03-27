@@ -1,9 +1,12 @@
 package nl.schiphol.api.models.flights;
 
+import nl.schiphol.api.models.Response;
+import nl.schiphol.api.models.destinations.Destination;
+
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class Flight {
+public class Flight extends Response<Flight> {
 
     private long id;
 

@@ -3,7 +3,9 @@ package nl.schiphol.api.builders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
+import nl.schiphol.api.models.Response;
 import org.apache.http.Header;
+import org.apache.http.HeaderElement;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -14,6 +16,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +24,15 @@ import java.util.List;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder<T, B extends RequestBuilder> {
+public abstract class RequestBuilder<T extends Response<T>, B extends RequestBuilder> {
+
+    private static final String FIRST = "first";
+
+    private static final String NEXT = "next";
+
+    private static final String LAST = "last";
+
+    private static final String PREVIOUS = "previous";
 
     private HttpClient httpClient;
 
@@ -70,6 +81,55 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
         return getThis();
     }
 
+    public T executeRaw(String uri) {
+        try {
+            return executeRaw(new URI(uri));
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public T executeRaw(URI uri) {
+        InputStream src = null;
+        try {
+            HttpGet get = new HttpGet(uri);
+            for (Header header : headers) get.addHeader(header);
+            HttpResponse response = getHttpClient().execute(get);
+            src = response.getEntity().getContent();
+            T object = new ObjectMapper().readValue(src, getMappedClass());
+            for (Header link : response.getHeaders("Link")) {
+                for (HeaderElement element : link.getElements()) {
+                    String position = element.getParameter(0).getValue();
+                    String url = element.getName() + "=" + element.getValue();
+                    url = url.replaceAll("([<>])", "");
+
+                    if(FIRST.equals(position))
+                        object.setFirst(url);
+                    else if(LAST.equals(position))
+                        object.setLast(url);
+                    else if(PREVIOUS.equals(position))
+                        object.setPrevious(url);
+                    else if(NEXT.equals(position))
+                        object.setNext(url);
+                }
+            }
+
+            object.setBuilder(this);
+            return object;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if(src != null) src.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return null;
+    }
+
     public T execute() {
         for (String requiredHeaderName : requiredHeaders()) {
             if(!hasHeader(requiredHeaderName)) throw new RequiredHeaderException(requiredHeaderName);
@@ -93,24 +153,14 @@ public abstract class RequestBuilder<T, B extends RequestBuilder> {
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
                 .setHost("api.schiphol.nl")
+                .setPort(443)
             .addParameters(getParameters())
             .setPath(path);
 
-        InputStream src = null;
         try {
-            HttpGet get = new HttpGet(builder.build());
-            for (Header header : headers) get.addHeader(header);
-            HttpResponse response = getHttpClient().execute(get);
-            src = response.getEntity().getContent();
-            return new ObjectMapper().readValue(src, getMappedClass());
-        } catch (URISyntaxException | IOException e) {
+            return executeRaw(builder.build());
+        } catch (URISyntaxException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if(src != null) src.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         return null;

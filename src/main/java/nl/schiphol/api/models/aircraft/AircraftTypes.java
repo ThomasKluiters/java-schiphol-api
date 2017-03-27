@@ -1,5 +1,7 @@
 package nl.schiphol.api.models.aircraft;
 
+import nl.schiphol.api.models.Response;
+
 import javax.annotation.Nonnull;
 import java.util.Iterator;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.List;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class AircraftTypes implements Iterable<AircraftType> {
+public class AircraftTypes extends Response<AircraftTypes> implements Iterable<AircraftType> {
 
     private List<AircraftType> aircraftTypes;
 
