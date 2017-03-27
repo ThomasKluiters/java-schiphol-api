@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> {
+public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
 
     private final String[] VALID_SORT_FIELDS = {
         "flightname",
@@ -27,64 +27,14 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
     };
 
     /**
-     * Scheduled date for the flights to depart, format "yyyy-MM-dd".
-     */
-    private LocalDate scheduleDate;
-
-    /**
      * The format for the scheduled date.
      */
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
-     * Scheduled time for the flight to depart, format "HH:mm.
-     */
-    private LocalTime scheduleTime;
-
-    /**
      * The format for the scheduled time.
      */
     private final DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm");
-
-    /**
-     * The name of the flight as printed on the ticket.
-     */
-    private String flightName;
-
-    /**
-     * Direction of the flight, either "A" for Arriving or "D" for Departing.
-     */
-    private FlightDirection flightDirection;
-
-    /**
-     * The name of the airline, a 2-3 character code.
-     */
-    private String airline;
-
-    /**
-     * NVLS code of a airliner.
-     */
-    private String nvlscode;
-
-    /**
-     * The route of the flight, IATA or ICAO code separated by commas.
-     */
-    private String route;
-
-    /**
-     * If true will also include delayed flights in results.
-     */
-    private boolean includeDelays;
-
-    /**
-     * 	From date of search period. Format: yyyy-MM-dd.
-     */
-    private LocalDate fromDate;
-
-    /**
-     * 	To date of search period (inclusive). Format: yyyy-MM-dd.
-     */
-    private LocalDate toDate;
 
     public enum FlightDirection {
         ARRIVING,
@@ -103,10 +53,9 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
         }
     }
 
+
     public FlightsBuilder() {
         super(Flights.class);
-
-        resourceVersion("v3");
     }
 
     /**
@@ -124,7 +73,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * @param scheduleDate scheduled date to get flights for.
      */
     public FlightsBuilder scheduleDate(@Nonnull final LocalDate scheduleDate) {
-        this.scheduleDate = scheduleDate;
+        addParameter("scheduledate", scheduleDate.format(dateFormat));
         return this;
     }
 
@@ -143,7 +92,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * @param scheduleTime scheduled time to get flights from.
      */
     public FlightsBuilder scheduleTime(@Nonnull final LocalTime scheduleTime) {
-        this.scheduleTime = scheduleTime;
+        addParameter("scheduletime", scheduleTime.format(timeFormat));
         return this;
     }
 
@@ -153,14 +102,14 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * @param flightName flight number as printed on the ticket.
      */
     public FlightsBuilder flightName(@Nonnull final String flightName) {
-        this.flightName = flightName;
+        addParameter("flightname", flightName);
         return this;
     }
 
     /**
      * Search for flights going in the given direction.
      *
-     * The direction of the flight, more information: {@link #flightDirection}
+     * The direction of the flight.
      *
      * @param raw a String with either "A" or "B" representing the flight direction.
      */
@@ -174,7 +123,6 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
     /**
      * Search for flights going in the given direction.
      *
-     * The direction of the flight, more information: {@link #flightDirection}
      *
      * @param raw a character with either the value 'A' or 'D' representing the flight direction.
      */
@@ -193,12 +141,11 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
     /**
      * Search for flights going in the given direction.
      *
-     * The direction of the flight, more information: {@link #flightDirection}
      *
      * @param direction the FlightDirection of the flight.
      */
     public FlightsBuilder direction(@Nonnull final FlightDirection direction) {
-        this.flightDirection = direction;
+        addParameter("flightdireection", direction.toString());
         return this;
     }
 
@@ -212,7 +159,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
         if(airline.length() != 2 && airline.length() != 3) {
             throw new IllegalArgumentException();
         }
-        this.airline = airline;
+        addParameter("airline", airline);
         return this;
     }
 
@@ -222,7 +169,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * @param nvlscode NVLS code of a airliner.
      */
     public FlightsBuilder nvlsCode(@Nonnull final String nvlscode) {
-        this.nvlscode = nvlscode;
+        addParameter("nvlscode", nvlscode);
         return this;
     }
 
@@ -232,7 +179,7 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * @param route the IATA or ICAO code of airport in route, comma separated.
      */
     public FlightsBuilder route(final String route) {
-        this.route = route;
+        addParameter("route", route);
         return this;
     }
 
@@ -240,12 +187,12 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
      * Includes delayed flights in the results.
      */
     public FlightsBuilder includeDelayed() {
-        this.includeDelays = true;
+        addParameter("includedelays", "true");
         return this;
     }
 
     /**
-     * Sets the from date for the flights to be requested, more information: {@link #fromDate}
+     * Sets the from date for the flights to be requested.
      *
      * The expected format is "yyy-MM-dd".
      *
@@ -256,18 +203,18 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
     }
 
     /**
-     * Sets the from date for the flights to be requested, more information: {@link #fromDate}
+     * Sets the from date for the flights to be requested.
      *
      * @param fromDate the LocalDate representation of the date.
      */
     public FlightsBuilder from(@Nonnull final LocalDate fromDate) {
-        this.fromDate = fromDate;
+        addParameter("fromdate", fromDate.format(dateFormat));
         return this;
     }
 
 
     /**
-     * Sets the from date for the flights to be requested, more information: {@link #fromDate}
+     * Sets the from date for the flights to be requested.
      *
      * The expected format is "yyy-MM-dd".
      *
@@ -278,111 +225,17 @@ public class FlightsBuilder extends JsonRequestBuilder<Flights, FlightsBuilder> 
     }
 
     /**
-     * Sets the from date for the flights to be requested, more information: {@link #toDate}
+     * Sets the from date for the flights to be requested.
      *
      * @param toDate the LocalDate representation of the date.
      */
     public FlightsBuilder to(@Nonnull final LocalDate toDate) {
-        this.toDate = toDate;
+        addParameter("todate", toDate.format(dateFormat));
         return this;
-    }
-
-    @Override
-    public void prepare(URIBuilder builder) {
-        builder.setPath("/public-flights/flights");
-
-        if(getScheduleDate() != null) {
-            builder.addParameter("scheduledate", getScheduleDate().format(dateFormat));
-        }
-
-        if(getScheduleTime() != null) {
-            builder.addParameter("scheduletime", getScheduleTime().format(timeFormat));
-        }
-
-        if(getFlightName() != null) {
-            builder.addParameter("flightname", getFlightName());
-        }
-
-        if(getFlightDirection() != null) {
-            builder.addParameter("flightdirection", getFlightDirection().toString());
-        }
-
-        if(getAirline() != null) {
-            builder.addParameter("airline", getAirline());
-        }
-
-        if(getNvlscode() != null) {
-            builder.addParameter("nvlscode", getNvlscode());
-        }
-
-        if(getRoute() != null) {
-            builder.addParameter("route", getRoute());
-        }
-
-        if(getFromDate() != null) {
-            builder.addParameter("fromdate", getFromDate().format(dateFormat));
-        }
-
-        if(getToDate() != null) {
-            builder.addParameter("todate", getToDate().format(dateFormat));
-        }
-
-        if(isIncludeDelays()) {
-            builder.addParameter("includedelays", String.valueOf(true));
-        }
-
     }
 
     @Override
     protected FlightsBuilder getThis() {
         return this;
-    }
-
-    LocalDate getScheduleDate() {
-        return scheduleDate;
-    }
-
-    DateTimeFormatter getDateFormat() {
-        return dateFormat;
-    }
-
-    LocalTime getScheduleTime() {
-        return scheduleTime;
-    }
-
-    DateTimeFormatter getTimeFormat() {
-        return timeFormat;
-    }
-
-    String getFlightName() {
-        return flightName;
-    }
-
-    FlightDirection getFlightDirection() {
-        return flightDirection;
-    }
-
-    String getAirline() {
-        return airline;
-    }
-
-    String getNvlscode() {
-        return nvlscode;
-    }
-
-    String getRoute() {
-        return route;
-    }
-
-    boolean isIncludeDelays() {
-        return includeDelays;
-    }
-
-    LocalDate getFromDate() {
-        return fromDate;
-    }
-
-    LocalDate getToDate() {
-        return toDate;
     }
 }
