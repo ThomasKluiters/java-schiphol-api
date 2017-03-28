@@ -91,8 +91,9 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifySortTest() throws IOException {
-        RequestBuilder builder = getInstance();
-        builder.sort(testSortBuilder);
+        mockedFlightsBuilder
+                .sort(testSortBuilder)
+                .execute();
 
         verify(mockedHttpClient).execute(argThat(new URIMatcher("sort", testSortBuilder.toString())));
     }
@@ -107,8 +108,10 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifyAppIdTest() throws IOException {
-        RequestBuilder builder = getInstance();
-        builder.appKey(testAppId);
+        mockedFlightsBuilder
+                .appId(testAppId)
+                .execute();
+
 
         verify(mockedHttpClient).execute(argThat(new URIMatcher("app_id", testAppId)));
     }
@@ -123,8 +126,9 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifyAppKeyTest() throws IOException {
-        RequestBuilder builder = getInstance();
-        builder.appKey(testAppKey);
+        mockedFlightsBuilder
+                .appKey(testAppKey)
+                .execute();
 
         verify(mockedHttpClient).execute(argThat(new URIMatcher("app_key", testAppKey)));
     }
