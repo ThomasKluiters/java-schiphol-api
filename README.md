@@ -19,43 +19,74 @@ Using maven
 </dependency>
 ```
 
+### Initialization
+
+```java
+SchipholCredentials credentials = SchipholCredentialsUtil.loadFrom("secrets.json");
+Schiphol schiphol = new Schiphol(credentials);
+```
+
+or
+
+```java
+Schiphol schiphol = new Schiphol("app_id", "app_key");
+```
+
+### Easily find all aircraft types
+
+Easily iterate over query results with Iterator and Pagination support.
+
+```Java
+AircraftTypes types = schiphol.aircraft().execute();
+
+for (AircraftTypes aircraftTypes : types.all()) {
+	for (AircraftType aircraftType : aircraftTypes) {
+	    System.out.println(aircraftType.getLongDescription());
+	}
+}
+```
+
+### Navigate results with ease
+
+```Java
+Flights flights = schiphol.flights()
+    .airline("KL")
+    .execute();
+
+Flights nextFlights = flights.next();
+Flights lastFlights = nextFlights.last();
+Flights prevFlights = lastFlights.previous();
+Flights firstFlights = prevFlights.first();
+```
+
 ### List Flights
 
 ```Java
-// initalize APi
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
-
 // first sort on date, ascending, then sort on time, descending
 SortBuilder sort = new SortBuilder()
-      .field("scheduledate").ascending()
-      .field("scheduletime").descending();
-        
+	.field("scheduledate").ascending()
+	.field("scheduletime").descending();
+
 // find all flights with airline "KL", departing
 Flights flights = schiphol.flights()
-      .airline("KL")
-      .direction(FlightDirection.DEPARTING)
-      .sort(sort)
+	.airline("KL")
+	.direction(FlightDirection.DEPARTING)
+	.sort(sort)
     .execute();
 ```
 
 ### Find single Flight
 
 ```Java
-// initalize APi
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
-
 // find flight with ID 121405342663252830
 Flight flight = schiphol.flight()
       .id(121405342663252830)
     .execute();
 ```
 
-### List all aircraft types
+### List aircraft types
 
 ```Java
-// initalize APi
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
-
 AircraftTypes types = schiphol.aircraft()
     .execute();
 ```
@@ -63,9 +94,6 @@ AircraftTypes types = schiphol.aircraft()
 ### List all destinations
 
 ```Java
-// initalize APi
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
-
 Destinations destinations = schiphol.destinations()
     .execute();
 ```
@@ -73,9 +101,6 @@ Destinations destinations = schiphol.destinations()
 ### Find destination
 
 ```Java
-// initalize APi
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
-
 Destination destination = schiphol.destination()
         .iata("AMS")
     .execute();
@@ -84,7 +109,6 @@ Destination destination = schiphol.destination()
 ### Iteration
 
 ```Java
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
 Airlines airlines = schiphol.airlines().execute();
 
 for(Airline airline : airlines) {
@@ -95,7 +119,6 @@ for(Airline airline : airlines) {
 ### Pagination
 
 ```Java
-Schiphol schiphol = new Schiphol("my_app_id", "my_app_key");
 Airlines airlines = schiphol.airlines().execute();
 
 if(airlines.hasNext()) {
