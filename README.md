@@ -31,6 +31,14 @@ SchipholCredentials credentials = SchipholCredentialsUtil.loadFrom("secrets.json
 Schiphol schiphol = new Schiphol(credentials);
 ```
 
+where secrets.json has the following format:
+```json
+{
+  "id" : "your_id",
+  "key" : "your_key"
+}
+```
+
 or
 
 ```java
