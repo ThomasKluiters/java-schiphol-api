@@ -40,6 +40,11 @@ public class Destination extends Response<Destination> {
         return schemaVersion;
     }
 
+    @Override
+    protected Destination get() {
+        return this;
+    }
+
     public static class PublicName {
 
         private String dutch;

@@ -32,4 +32,9 @@ public class AircraftTypes extends Response<AircraftTypes> implements Iterable<A
     public Iterator<AircraftType> iterator() {
         return getAircraftTypes().iterator();
     }
+
+    @Override
+    protected AircraftTypes get() {
+        return this;
+    }
 }

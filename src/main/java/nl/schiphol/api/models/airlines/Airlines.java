@@ -32,4 +32,9 @@ public class Airlines extends Response<Airlines> implements Iterable<Airline> {
     public Iterator<Airline> iterator() {
         return getAirlines().iterator();
     }
+
+    @Override
+    protected Airlines get() {
+        return this;
+    }
 }

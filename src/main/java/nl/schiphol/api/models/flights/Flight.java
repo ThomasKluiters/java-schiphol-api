@@ -192,4 +192,9 @@ public class Flight extends Response<Flight> {
     public String getSchemaVersion() {
         return schemaVersion;
     }
+
+    @Override
+    protected Flight get() {
+        return this;
+    }
 }

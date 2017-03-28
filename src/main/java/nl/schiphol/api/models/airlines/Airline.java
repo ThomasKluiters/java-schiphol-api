@@ -38,4 +38,9 @@ public class Airline extends Response<Airline> {
     public String getSchemaVersion() {
         return schemaVersion;
     }
+
+    @Override
+    protected Airline get() {
+        return this;
+    }
 }

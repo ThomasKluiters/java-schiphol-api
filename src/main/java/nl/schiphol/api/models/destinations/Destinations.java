@@ -32,4 +32,9 @@ public class Destinations extends Response<Destinations> implements Iterable<Des
     public Iterator<Destination> iterator() {
         return getDestinations().iterator();
     }
+
+    @Override
+    protected Destinations get() {
+        return this;
+    }
 }

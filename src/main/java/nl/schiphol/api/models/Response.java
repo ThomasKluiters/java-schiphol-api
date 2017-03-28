@@ -1,13 +1,16 @@
 package nl.schiphol.api.models;
 
+import com.google.common.collect.ImmutableList;
 import nl.schiphol.api.builders.RequestBuilder;
 
 import javax.annotation.Nonnull;
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by Thomas on 27-3-2017.
  */
-public class Response<T extends Response<T>> {
+public abstract class Response<T extends Response<T>> {
 
     private String next;
 
@@ -55,6 +58,8 @@ public class Response<T extends Response<T>> {
         return getPrevious() != null;
     }
 
+    abstract protected T get();
+
     public T next() {
         return builder.executeRaw(getNext());
     }
@@ -71,6 +76,10 @@ public class Response<T extends Response<T>> {
         return builder.executeRaw(getFirst());
     }
 
+    public ResponseIterator all() {
+        return new ResponseIterator(get());
+    }
+
     private String getNext() {
         return next;
     }
@@ -85,6 +94,36 @@ public class Response<T extends Response<T>> {
 
     private String getFirst() {
         return first;
+    }
+
+    public class ResponseIterator implements Iterator<T>, Iterable<T> {
+
+        private Queue<T> responses;
+
+        ResponseIterator(@Nonnull T response) {
+            responses = new LinkedList<T>(Collections.singletonList(response));
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !responses.isEmpty();
+        }
+
+        @Override
+        public T next() {
+            final T current = responses.remove();
+            if(current.hasNext()) {
+                responses.add(current.next());
+            }
+
+            return current;
+        }
+
+        @Override
+        @Nonnull
+        public Iterator<T> iterator() {
+            return this;
+        }
     }
 
 }
