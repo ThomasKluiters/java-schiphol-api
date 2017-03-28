@@ -44,43 +44,6 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     private final LocalTime testTime = LocalTime.of(testHour, testMinute);
 
-    private HttpClient mockedHttpClient;
-
-    private FlightsBuilder mockedFlightsBuilder;
-
-    @Before
-    public void setUp() throws Exception {
-        InputStream is = new FileInputStream("example_flights.json");
-
-        mockedHttpClient = mock(HttpClient.class);
-
-        mockedFlightsBuilder = new FlightsBuilder()
-                .appId("")
-                .appKey("")
-                .withClient(mockedHttpClient);
-
-        HttpResponse mockedHttpResponse = mock(HttpResponse.class);
-
-        HttpEntity mockedHttpEntity = mock(HttpEntity.class);
-
-        StatusLine mockedStatusLine = mock(StatusLine.class);
-
-        when(mockedHttpClient.execute(any()))
-                .thenReturn(mockedHttpResponse);
-
-        when(mockedHttpResponse.getStatusLine())
-                .thenReturn(mockedStatusLine);
-
-        when(mockedStatusLine.getStatusCode())
-                .thenReturn(200);
-
-        when(mockedHttpResponse.getEntity())
-                .thenReturn(mockedHttpEntity);
-
-        when(mockedHttpEntity.getContent())
-                .thenReturn(is);
-    }
-
     @Test
     public void notIncludeDelayedTest() {
         FlightsBuilder builder = new FlightsBuilder();
