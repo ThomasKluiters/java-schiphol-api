@@ -7,8 +7,7 @@ A wrapper for the Schiphol API written in Java
 
 #### Maven
 
-Using Jitpack
-
+Add jitpack to your repositories:
 ```xml
 <repository>
     <id>jitpack.io</id>
@@ -16,6 +15,7 @@ Using Jitpack
 </repository>
 ```
 
+Add the dependancy to the dependancies:
 ```xml
 <dependency>
       <groupId>com.github.ThomasKluiters</groupId>
