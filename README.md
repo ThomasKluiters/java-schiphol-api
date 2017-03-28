@@ -1,11 +1,6 @@
 # java-schiphol-api
 A wrapper for the Schiphol API written in Java
 
-## TODO
-
-- test thoroughly
-- verify sorting parameters
-
 ## Usage
 
 ### Installing
