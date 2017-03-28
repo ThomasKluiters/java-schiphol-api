@@ -23,7 +23,7 @@ import static org.mockito.Mockito.when;
 /**
  * Created by Thomas on 23-3-2017.
  */
-public abstract class RequestBuilderTest {
+public abstract class RequestBuilderTest<T extends RequestBuilder<?, T>> {
 
     private final Long testPage = 1l;
 
@@ -37,15 +37,15 @@ public abstract class RequestBuilderTest {
 
     HttpClient mockedHttpClient;
 
-    FlightsBuilder mockedFlightsBuilder;
+    T mockedBuilder;
 
-    abstract RequestBuilder getInstance();
+    abstract T getInstance();
 
     @Before
     public void setUp() throws Exception {
         mockedHttpClient = mock(HttpClient.class);
 
-        mockedFlightsBuilder = new FlightsBuilder()
+        mockedBuilder = getInstance()
                 .appId("")
                 .appKey("")
             .withClient(mockedHttpClient);
@@ -91,11 +91,11 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifySortTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .sort(testSortBuilder)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("sort", testSortBuilder.toString())));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("sort", testSortBuilder.toString())));
     }
 
     @Test
@@ -108,12 +108,12 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifyAppIdTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .appId(testAppId)
                 .execute();
 
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("app_id", testAppId)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("app_id", testAppId)));
     }
 
     @Test
@@ -126,11 +126,11 @@ public abstract class RequestBuilderTest {
 
     @Test
     public void verifyAppKeyTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .appKey(testAppKey)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("app_key", testAppKey)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("app_key", testAppKey)));
     }
 
     @Test
@@ -141,13 +141,29 @@ public abstract class RequestBuilderTest {
         assertEquals(testResourceVersion, builder.getHeader("ResourceVersion"));
     }
 
-    protected class URIMatcher extends ArgumentMatcher<HttpUriRequest> {
+    protected class URIPathMatcher extends ArgumentMatcher<HttpUriRequest> {
+
+        private final String path;
+
+        public URIPathMatcher(String path) {
+            this.path = path;
+        }
+
+        @Override
+        public boolean matches(Object o) {
+            HttpUriRequest request = (HttpUriRequest)o;
+            return new URIBuilder(request.getURI())
+                    .getPath().equals(path);
+        }
+    }
+
+    protected class URIParameterMatcher extends ArgumentMatcher<HttpUriRequest> {
 
         private final String name;
 
         private final String value;
 
-        URIMatcher(String name, String value) {
+        URIParameterMatcher(String name, String value) {
             this.name = name;
             this.value = value;
         }

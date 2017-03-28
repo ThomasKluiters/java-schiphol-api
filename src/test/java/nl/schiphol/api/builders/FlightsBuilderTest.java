@@ -1,30 +1,19 @@
 package nl.schiphol.api.builders;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.message.BasicStatusLine;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
-public class FlightsBuilderTest extends RequestBuilderTest {
+public class FlightsBuilderTest extends RequestBuilderTest<FlightsBuilder> {
 
     private final int testYear = 2017;
 
@@ -61,11 +50,11 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyIncludeDelayedFlightsTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .includeDelayed()
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("includedelays", "true")));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("includedelays", "true")));
     }
 
     @Test
@@ -86,11 +75,11 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyScheduleDateParameterTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .scheduleDate(testDate)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("scheduledate", rawTestDate)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("scheduledate", rawTestDate)));
     }
 
     @Test
@@ -112,11 +101,11 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyScheduleTimeParameterTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .scheduleTime(testTime)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("scheduletime", rawTestTime)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("scheduletime", rawTestTime)));
     }
 
     @Test
@@ -161,11 +150,11 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyFlightDirectionTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .direction(FlightsBuilder.FlightDirection.ARRIVING)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("flightdirection", "A")));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("flightdirection", "A")));
     }
 
 
@@ -187,11 +176,11 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyFromDateTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .from(testDate)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("fromdate", rawTestDate)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("fromdate", rawTestDate)));
     }
 
     @Test
@@ -212,15 +201,15 @@ public class FlightsBuilderTest extends RequestBuilderTest {
 
     @Test
     public void verifyToDateParameterTest() throws IOException {
-        mockedFlightsBuilder
+        mockedBuilder
                 .to(testDate)
                 .execute();
 
-        verify(mockedHttpClient).execute(argThat(new URIMatcher("todate", rawTestDate)));
+        verify(mockedHttpClient).execute(argThat(new URIParameterMatcher("todate", rawTestDate)));
     }
 
     @Override
-    RequestBuilder getInstance() {
-        return new FlightBuilder();
+    FlightsBuilder getInstance() {
+        return new FlightsBuilder();
     }
 }
