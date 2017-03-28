@@ -32,14 +32,15 @@ public class FlightsBuilderExample {
         Flights flights = schiphol.flights()
                 .from(fromDate)
                 .to(toDate)
-                .airline("K L")
+                .airline("KL")
                 .direction("D")
                 .page(0)
                 .sort(sort)
                 .execute();
 
-        System.out.println(flights.hasNext());
-        System.out.println(flights.next().hasPrevious());
+        for (Flight flight : flights) {
+            System.out.println(flight.getFlightName());
+        }
     }
 
 }

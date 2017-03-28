@@ -38,4 +38,9 @@ public class AircraftType extends Response<AircraftType> {
     public String getSchemaVersion() {
         return schemaVersion;
     }
+
+    @Override
+    protected AircraftType get() {
+        return this;
+    }
 }

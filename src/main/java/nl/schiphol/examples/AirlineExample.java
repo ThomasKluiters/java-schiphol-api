@@ -15,10 +15,10 @@ public class AirlineExample {
         SchipholCredentials credentials = SchipholCredentialsUtil.loadFrom("secrets.json");
         Schiphol schiphol = new Schiphol(credentials);
 
-        Airlines airlines = schiphol.airlines().execute();
-
-        for (Airline airline : airlines) {
-            System.out.println(airline.getIata());
+        for (Airlines airlines : schiphol.airlines().execute().all()) {
+            for (Airline airline : airlines) {
+                System.out.println(airline.getPublicName());
+            }
         }
     }
 
