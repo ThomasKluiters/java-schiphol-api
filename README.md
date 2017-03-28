@@ -10,12 +10,22 @@ A wrapper for the Schiphol API written in Java
 
 ### Installing
 
-Using maven
+#### Maven
+
+Using Jitpack
+
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
 
 ```xml
 <dependency>
       <groupId>com.github.ThomasKluiters</groupId>
       <artifactId>java-schiphol-api</artifactId>
+      <version>v1.0.3</version>
 </dependency>
 ```
 
