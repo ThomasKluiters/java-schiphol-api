@@ -10,14 +10,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,51 +82,41 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return getThis();
     }
 
-    public T executeRaw(String uri) {
+    public T execute(String uri) {
         try {
-            return executeRaw(new URI(uri));
+            return execute(new URIBuilder(uri));
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public T executeRaw(URI uri) {
+    public T execute(URIBuilder builder) {
         InputStream src = null;
         try {
+            URI uri = builder.build();
             HttpGet get = new HttpGet(uri);
             for (Header header : headers) get.addHeader(header);
             HttpResponse response = getHttpClient().execute(get);
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 src = response.getEntity().getContent();
                 T object = new ObjectMapper().readValue(src, getMappedClass());
-                if(response.getHeaders("Link") != null) {
-                    for (Header link : response.getHeaders("Link")) {
-                        for (String value : link.getValue().split(", ")) {
-                            Matcher matcher = pattern.matcher(value);
-                            if (matcher.find()) {
-                                String url = matcher.group(1);
-                                String position = matcher.group(2);
+                extractPaginationLinks(response, object);
+                object.setBuilder(this);
 
-                                if (FIRST.equals(position))
-                                    object.setFirst(url);
-                                else if (LAST.equals(position))
-                                    object.setLast(url);
-                                else if (PREVIOUS.equals(position))
-                                    object.setPrevious(url);
-                                else if (NEXT.equals(position))
-                                    object.setNext(url);
-                            }
-                        }
+                for (NameValuePair pair : builder.getQueryParams()) {
+                    if(pair.getName().equals("page")) {
+                        final long page = Long.valueOf(pair.getValue());
+                        object.setPage(page);
                     }
                 }
-                object.setBuilder(this);
+
                 return object;
             } else {
                 System.err.println(response);
             }
 
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         } finally {
             try {
@@ -139,6 +127,29 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         }
 
         return null;
+    }
+
+    private void extractPaginationLinks(HttpResponse response, T object) {
+        if(response.getHeaders("Link") != null) {
+            for (Header link : response.getHeaders("Link")) {
+                for (String value : link.getValue().split(", ")) {
+                    Matcher matcher = pattern.matcher(value);
+                    if (matcher.find()) {
+                        String url = matcher.group(1);
+                        String position = matcher.group(2);
+
+                        if (FIRST.equals(position))
+                            object.setFirst(url);
+                        else if (LAST.equals(position))
+                            object.setLast(url);
+                        else if (PREVIOUS.equals(position))
+                            object.setPrevious(url);
+                        else if (NEXT.equals(position))
+                            object.setNext(url);
+                    }
+                }
+            }
+        }
     }
 
     public T execute() {
@@ -168,13 +179,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
             .addParameters(getParameters())
             .setPath(path);
 
-        try {
-            return executeRaw(builder.build());
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-
-        return null;
+        return execute(builder);
     }
 
     protected boolean hasHeader(final String name) {
