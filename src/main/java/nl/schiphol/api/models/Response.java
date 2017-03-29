@@ -1,11 +1,9 @@
 package nl.schiphol.api.models;
 
-import com.google.common.collect.ImmutableList;
 import nl.schiphol.api.builders.RequestBuilder;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by Thomas on 27-3-2017.
@@ -20,7 +18,13 @@ public abstract class Response<T extends Response<T>> {
 
     private String first;
 
+    private Long page = 0L;
+
     private RequestBuilder<T, ?> builder;
+
+    public void setPage(Long page) {
+        this.page = page;
+    }
 
     public void setNext(String next) {
         this.next = next;
@@ -61,19 +65,19 @@ public abstract class Response<T extends Response<T>> {
     abstract protected T get();
 
     public T next() {
-        return builder.executeRaw(getNext());
+        return builder.execute(getNext());
     }
 
     public T previous() {
-        return builder.executeRaw(getPrevious());
+        return builder.execute(getPrevious());
     }
 
     public T last() {
-        return builder.executeRaw(getLast());
+        return builder.execute(getLast());
     }
 
     public T first() {
-        return builder.executeRaw(getFirst());
+        return builder.execute(getFirst());
     }
 
     public ResponseIterator all() {
@@ -94,6 +98,10 @@ public abstract class Response<T extends Response<T>> {
 
     private String getFirst() {
         return first;
+    }
+
+    public Long getPage() {
+        return page;
     }
 
     public class ResponseIterator implements Iterator<T>, Iterable<T> {
