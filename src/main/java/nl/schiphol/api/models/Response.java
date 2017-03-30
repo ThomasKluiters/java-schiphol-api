@@ -1,5 +1,6 @@
 package nl.schiphol.api.models;
 
+import lombok.Data;
 import nl.schiphol.api.builders.RequestBuilder;
 
 import javax.annotation.Nonnull;
@@ -8,6 +9,7 @@ import java.util.*;
 /**
  * Created by Thomas on 27-3-2017.
  */
+@Data
 public abstract class Response<T extends Response<T>> {
 
     private String next;
@@ -21,30 +23,6 @@ public abstract class Response<T extends Response<T>> {
     private Long page = 0L;
 
     private RequestBuilder<T, ?> builder;
-
-    public void setPage(Long page) {
-        this.page = page;
-    }
-
-    public void setNext(String next) {
-        this.next = next;
-    }
-
-    public void setPrevious(String previous) {
-        this.previous = previous;
-    }
-
-    public void setLast(String last) {
-        this.last = last;
-    }
-
-    public void setFirst(String first) {
-        this.first = first;
-    }
-
-    public void setBuilder(@Nonnull RequestBuilder<T, ?> builder) {
-        this.builder = builder;
-    }
 
     public boolean hasFirst() {
         return getFirst() != null;
@@ -65,43 +43,23 @@ public abstract class Response<T extends Response<T>> {
     abstract protected T get();
 
     public T next() {
-        return builder.execute(getNext());
+        return getBuilder().execute(getNext());
     }
 
     public T previous() {
-        return builder.execute(getPrevious());
+        return getBuilder().execute(getPrevious());
     }
 
     public T last() {
-        return builder.execute(getLast());
+        return getBuilder().execute(getLast());
     }
 
     public T first() {
-        return builder.execute(getFirst());
+        return getBuilder().execute(getFirst());
     }
 
     public ResponseIterator all() {
         return new ResponseIterator(get());
-    }
-
-    private String getNext() {
-        return next;
-    }
-
-    private String getPrevious() {
-        return previous;
-    }
-
-    private String getLast() {
-        return last;
-    }
-
-    private String getFirst() {
-        return first;
-    }
-
-    public Long getPage() {
-        return page;
     }
 
     public class ResponseIterator implements Iterator<T>, Iterable<T> {
@@ -125,6 +83,11 @@ public abstract class Response<T extends Response<T>> {
             }
 
             return current;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException();
         }
 
         @Override

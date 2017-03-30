@@ -1,11 +1,13 @@
 package nl.schiphol.api.models.destinations;
 
+import lombok.Data;
 import nl.schiphol.api.models.Response;
 import nl.schiphol.api.models.airlines.Airline;
 
 /**
  * Created by Thomas on 22-3-2017.
  */
+@Data
 public class Destination extends Response<Destination> {
 
     private String city;
@@ -20,31 +22,12 @@ public class Destination extends Response<Destination> {
 
     Destination() { }
 
-    public String getCity() {
-        return city;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getIata() {
-        return iata;
-    }
-
-    public PublicName getPublicName() {
-        return publicName;
-    }
-
-    public String getSchemaVersion() {
-        return schemaVersion;
-    }
-
     @Override
     protected Destination get() {
         return this;
     }
 
+    @Data
     public static class PublicName {
 
         private String dutch;
@@ -53,13 +36,6 @@ public class Destination extends Response<Destination> {
 
         PublicName() { }
 
-        public String getDutch() {
-            return dutch;
-        }
-
-        public String getEnglish() {
-            return english;
-        }
     }
 
 }

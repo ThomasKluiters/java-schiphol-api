@@ -1,8 +1,11 @@
 package nl.schiphol.api.models.flights;
 
+import lombok.Data;
+
 /**
  * Created by Thomas on 22-3-2017.
  */
+@Data
 public class FlightCheckinAllocation {
 
     private String endTime;
@@ -13,29 +16,16 @@ public class FlightCheckinAllocation {
 
     FlightCheckinAllocation() { }
 
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public Rows getRows() {
-        return rows;
-    }
-
+    @Data
     public static class Rows {
 
         private Row[] rows;
 
         Rows() { }
 
-        public Row[] getRows() {
-            return rows;
-        }
     }
 
+    @Data
     public static class Row {
 
         private Desks desks;
@@ -44,29 +34,18 @@ public class FlightCheckinAllocation {
 
         Row() { }
 
-        public Desks getDesks() {
-            return desks;
-        }
-
-        public String getPosition() {
-            return position;
-        }
     }
 
+    @Data
     public static class Desks {
 
         private Desk[] desks;
 
         Desks() { }
 
-        public Desk[] getDesks() {
-            return desks;
-        }
-
-
-
     }
 
+    @Data
     public static class Desk {
 
         private CheckinClass checkinClass;
@@ -75,15 +54,9 @@ public class FlightCheckinAllocation {
 
         Desk() { }
 
-        public CheckinClass getCheckinClass() {
-            return checkinClass;
-        }
-
-        public int getPosition() {
-            return position;
-        }
     }
 
+    @Data
     public static class CheckinClass {
 
         private String code;
@@ -92,13 +65,6 @@ public class FlightCheckinAllocation {
 
         CheckinClass() { }
 
-        public String getCode() {
-            return code;
-        }
-
-        public String getDescription() {
-            return description;
-        }
     }
 
 }
