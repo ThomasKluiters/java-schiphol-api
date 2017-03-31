@@ -1,6 +1,7 @@
 package nl.schiphol.api.builders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
 import nl.schiphol.api.models.Response;
@@ -11,6 +12,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -35,10 +37,13 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
     private static final String PREVIOUS = "prev";
 
+    @Getter
     private HttpClient httpClient;
 
+    @Getter
     private final Class<T> mappedClass;
 
+    @Getter
     private final String endpoint;
 
     private List<NameValuePair> pathParameters;
@@ -60,7 +65,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return addParameter("app_key", appKey);
     }
 
-    public B resourceVersion(final String resourceVersion) {
+    B resourceVersion(final String resourceVersion) {
         return addHeader("ResourceVersion", resourceVersion);
     }
 
@@ -177,28 +182,17 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return execute(builder);
     }
 
-    protected boolean hasHeader(final String name) {
-        if(headers == null) return false;
-
-        for (Header header : getHeaders()) {
-            if(header.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasHeader(@Nonnull final String name) {
+        return headers != null && headers.stream()
+                .anyMatch(header -> header.getName().equals(name));
     }
 
-    protected boolean hasParameter(final String name) {
-        if(parameters == null) return false;
-        for (NameValuePair parameter: getParameters()) {
-            if(parameter.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasParameter(@Nonnull final String name) {
+        return parameters != null && parameters.stream()
+                .anyMatch(parameter -> parameter.getName().equals(name));
     }
 
-    protected B addParameter(final String name, final String value) {
+    B addParameter(final String name, final String value) {
         final List<NameValuePair> parameters = getParameters();
 
         parameters.removeIf(parameter -> parameter.getName().equals(name));
@@ -206,7 +200,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return getThis();
     }
 
-    protected B addHeader(final String name, final String value) {
+    private B addHeader(final String name, final String value) {
         final List<Header> headers = getHeaders();
 
         headers.removeIf(header -> header.getName().equals(name));
@@ -214,11 +208,11 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return getThis();
     }
 
-    protected B addPathParameter(final String name, final String value) {
+    B addPathParameter(final String name, final String value) {
         return addPathParameter(name, null, value);
     }
 
-    protected B addPathParameter(final String name, final String extra, final String value) {
+    B addPathParameter(final String name, final String extra, final String value) {
         final List<NameValuePair> pathParameters = getPathParameters();
 
         pathParameters.removeIf(parameter -> parameter.getName().equals(name));
@@ -227,21 +221,21 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     }
 
 
-    public List<NameValuePair> getParameters() {
+    private List<NameValuePair> getParameters() {
         if(parameters == null) {
             parameters = new ArrayList<>();
         }
         return parameters;
     }
 
-    public List<Header> getHeaders() {
+    private List<Header> getHeaders() {
         if(headers == null) {
             headers = new ArrayList<>();
         }
         return headers;
     }
 
-    public List<NameValuePair> getPathParameters() {
+    private List<NameValuePair> getPathParameters() {
         if(pathParameters == null) {
             pathParameters = new ArrayList<>();
         }
@@ -275,24 +269,12 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return null;
     }
 
-    protected String[] requiredParameters() {
+    private String[] requiredParameters() {
         return new String[]{ "app_id", "app_key" };
     }
 
-    protected String[] requiredHeaders() {
+    private String[] requiredHeaders() {
         return new String[]{ "ResourceVersion" };
-    }
-
-    public HttpClient getHttpClient() {
-        return httpClient;
-    }
-
-    public Class<T> getMappedClass() {
-        return mappedClass;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
     }
 
     protected abstract B getThis();
