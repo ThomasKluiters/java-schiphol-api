@@ -46,15 +46,20 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     @Getter
     private final String endpoint;
 
-    private List<NameValuePair> pathParameters;
+    @Getter
+    private List<NameValuePair> pathParameters = new ArrayList<>();
 
-    private List<NameValuePair> parameters;
+    @Getter
+    private List<NameValuePair> parameters = new ArrayList<>();
 
-    private List<Header> headers;
+    @Getter
+    private List<Header> headers = new ArrayList<>();
 
     public RequestBuilder(final Class<T> mappedClass, String endpoint) {
         this.mappedClass = mappedClass;
         this.endpoint = endpoint;
+
+        addHeader("Accept", "Application/Json");
     }
 
     public B appId(final String appId) {
@@ -163,14 +168,12 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
         String path = getEndpoint();
 
-        if(pathParameters != null) {
-            for (NameValuePair pathParameter : getPathParameters()) {
-                final String pathParameterName = pathParameter.getName();
-                final String pathParameterValue = pathParameter.getValue();
-                path = path.replace("{" + pathParameterName + "}", pathParameterValue);
-            }
-            path = path.replaceAll("\\{.+}", "");
+        for (NameValuePair pathParameter : getPathParameters()) {
+            final String pathParameterName = pathParameter.getName();
+            final String pathParameterValue = pathParameter.getValue();
+            path = path.replace("{" + pathParameterName + "}", pathParameterValue);
         }
+        path = path.replaceAll("\\{.+}", "");
 
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
@@ -183,13 +186,11 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     }
 
     private boolean hasHeader(@Nonnull final String name) {
-        return headers != null && headers.stream()
-                .anyMatch(header -> header.getName().equals(name));
+        return headers.stream().anyMatch(header -> header.getName().equals(name));
     }
 
     private boolean hasParameter(@Nonnull final String name) {
-        return parameters != null && parameters.stream()
-                .anyMatch(parameter -> parameter.getName().equals(name));
+        return parameters.stream().anyMatch(parameter -> parameter.getName().equals(name));
     }
 
     B addParameter(final String name, final String value) {
@@ -220,53 +221,34 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return getThis();
     }
 
-
-    private List<NameValuePair> getParameters() {
-        if(parameters == null) {
-            parameters = new ArrayList<>();
-        }
-        return parameters;
+    @Nonnull
+    String getPathParameter(@Nonnull final String name) {
+        return getPathParameters().stream()
+                .filter(parameter -> parameter.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Path parameter %s not set!", name)))
+                .getValue();
     }
 
-    private List<Header> getHeaders() {
-        if(headers == null) {
-            headers = new ArrayList<>();
-        }
-        return headers;
+    @Nonnull
+    String getHeader(@Nonnull final String name) {
+        return getHeaders().stream()
+                .filter(header -> header.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Header %s not set!", name)))
+                .getValue();
     }
 
-    private List<NameValuePair> getPathParameters() {
-        if(pathParameters == null) {
-            pathParameters = new ArrayList<>();
-        }
-        return pathParameters;
-    }
-
-    String getPathParameter(final String name) {
-        for (NameValuePair parameter : pathParameters) {
-            if(parameter.getName().equals(name)) {
-                return parameter.getValue();
-            }
-        }
-        return null;
-    }
-
-    String getHeader(final String name) {
-        for (Header header : getHeaders()) {
-            if(header.getName().equals(name)) {
-                return header.getValue();
-            }
-        }
-        return null;
-    }
-
-    String getParameter(final String name) {
-        for (NameValuePair parameter : getParameters()) {
-            if(parameter.getName().equals(name)) {
-                return parameter.getValue();
-            }
-        }
-        return null;
+    @Nonnull
+    String getParameter(@Nonnull final String name) {
+        return getParameters().stream()
+                .filter(parameter -> parameter.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Parameter %s not set!", name)))
+                .getValue();
     }
 
     private String[] requiredParameters() {
