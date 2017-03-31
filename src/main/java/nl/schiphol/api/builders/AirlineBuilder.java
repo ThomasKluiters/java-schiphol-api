@@ -18,8 +18,7 @@ public class AirlineBuilder extends RequestBuilder<Airline, AirlineBuilder> {
      * @param airlineCode the IATAO / ICAO code of the airline.
      */
     public AirlineBuilder airlineCode(String airlineCode) {
-        addPathParameter("airlineCode", airlineCode);
-        return this;
+        return addPathParameter("airlineCode", airlineCode);
     }
 
     @Override

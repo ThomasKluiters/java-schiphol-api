@@ -53,28 +53,23 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     }
 
     public B appId(final String appId) {
-        addParameter("app_id", appId);
-        return getThis();
+        return addParameter("app_id", appId);
     }
 
     public B appKey(final String appKey) {
-        addParameter("app_key", appKey);
-        return getThis();
+        return addParameter("app_key", appKey);
     }
 
     public B resourceVersion(final String resourceVersion) {
-        addHeader("ResourceVersion", resourceVersion);
-        return getThis();
+        return addHeader("ResourceVersion", resourceVersion);
     }
 
     public B page(final long page) {
-        addParameter("page", String.valueOf(page));
-        return getThis();
+        return addParameter("page", String.valueOf(page));
     }
 
     public B sort(final SortBuilder sort) {
-        addParameter("sort", sort.toString());
-        return getThis();
+        return addParameter("sort", sort.toString());
     }
 
     public B withClient(final HttpClient httpClient) {
@@ -113,7 +108,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
                 return object;
             } else {
-                System.err.println(response);
+                System.err.println(response.getStatusLine());
             }
 
         } catch (IOException | URISyntaxException e) {
@@ -195,7 +190,6 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
     protected boolean hasParameter(final String name) {
         if(parameters == null) return false;
-
         for (NameValuePair parameter: getParameters()) {
             if(parameter.getName().equals(name)) {
                 return true;
@@ -204,29 +198,32 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return false;
     }
 
-    protected void addParameter(final String name, final String value) {
+    protected B addParameter(final String name, final String value) {
         final List<NameValuePair> parameters = getParameters();
 
         parameters.removeIf(parameter -> parameter.getName().equals(name));
         parameters.add(new BasicNameValuePair(name, value));
+        return getThis();
     }
 
-    protected void addHeader(final String name, final String value) {
+    protected B addHeader(final String name, final String value) {
         final List<Header> headers = getHeaders();
 
         headers.removeIf(header -> header.getName().equals(name));
         headers.add(new BasicHeader(name, value));
+        return getThis();
     }
 
-    protected void addPathParameter(final String name, final String value) {
-        addPathParameter(name, null, value);
+    protected B addPathParameter(final String name, final String value) {
+        return addPathParameter(name, null, value);
     }
 
-    protected void addPathParameter(final String name, final String extra, final String value) {
+    protected B addPathParameter(final String name, final String extra, final String value) {
         final List<NameValuePair> pathParameters = getPathParameters();
 
         pathParameters.removeIf(parameter -> parameter.getName().equals(name));
         pathParameters.add(new BasicNameValuePair(name, (extra == null ? "" : extra + "/") + value));
+        return getThis();
     }
 
 
