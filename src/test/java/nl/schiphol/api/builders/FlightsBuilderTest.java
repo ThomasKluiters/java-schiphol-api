@@ -34,13 +34,6 @@ public class FlightsBuilderTest extends RequestBuilderTest<FlightsBuilder> {
     private final LocalTime testTime = LocalTime.of(testHour, testMinute);
 
     @Test
-    public void notIncludeDelayedTest() {
-        FlightsBuilder builder = new FlightsBuilder();
-
-        assertEquals(null, builder.getParameter("includedelays"));
-    }
-
-    @Test
     public void includeDelayedTest() {
         FlightsBuilder builder = new FlightsBuilder();
         builder.includeDelayed();
