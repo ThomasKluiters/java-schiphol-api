@@ -20,8 +20,7 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes, AircraftBuild
      * @param iatamain IATA main code.
      */
     public AircraftBuilder iatamain(@Nonnull final String iatamain) {
-        addParameter("iatamain", iatamain);
-        return this;
+        return addParameter("iatamain", iatamain);
     }
 
     /**
@@ -30,8 +29,7 @@ public class AircraftBuilder extends RequestBuilder<AircraftTypes, AircraftBuild
      * @param iatasub IATA sub code.
      */
     public AircraftBuilder iatasub(@Nonnull final String iatasub) {
-        addParameter("iatasub", iatasub);
-        return this;
+        return addParameter("iatasub", iatasub);
     }
 
     @Override

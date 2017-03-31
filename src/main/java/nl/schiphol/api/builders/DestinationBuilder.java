@@ -21,8 +21,7 @@ public class DestinationBuilder extends RequestBuilder<Destination, DestinationB
      * @param iata IATA code.
      */
     public DestinationBuilder iata(@Nonnull final String iata) {
-        addPathParameter("iata", iata);
-        return this;
+        return addPathParameter("iata", iata);
     }
 
     @Override

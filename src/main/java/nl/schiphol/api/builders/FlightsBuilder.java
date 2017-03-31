@@ -59,8 +59,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param scheduleDate scheduled date to get flights for.
      */
     public FlightsBuilder scheduleDate(@Nonnull final LocalDate scheduleDate) {
-        addParameter("scheduledate", scheduleDate.format(dateFormat));
-        return this;
+        return addParameter("scheduledate", scheduleDate.format(dateFormat));
     }
 
     /**
@@ -78,8 +77,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param scheduleTime scheduled time to get flights from.
      */
     public FlightsBuilder scheduleTime(@Nonnull final LocalTime scheduleTime) {
-        addParameter("scheduletime", scheduleTime.format(timeFormat));
-        return this;
+        return addParameter("scheduletime", scheduleTime.format(timeFormat));
     }
 
     /**
@@ -88,8 +86,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param flightName flight number as printed on the ticket.
      */
     public FlightsBuilder flightName(@Nonnull final String flightName) {
-        addParameter("flightname", flightName);
-        return this;
+        return addParameter("flightname", flightName);
     }
 
     /**
@@ -131,8 +128,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param direction the FlightDirection of the flight.
      */
     public FlightsBuilder direction(@Nonnull final FlightDirection direction) {
-        addParameter("flightdirection", direction.toString());
-        return this;
+        return addParameter("flightdirection", direction.toString());
     }
 
 
@@ -145,8 +141,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
         if(airline.length() != 2 && airline.length() != 3) {
             throw new IllegalArgumentException();
         }
-        addParameter("airline", airline);
-        return this;
+        return addParameter("airline", airline);
     }
 
     /**
@@ -155,8 +150,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param nvlscode NVLS code of a airliner.
      */
     public FlightsBuilder nvlsCode(@Nonnull final String nvlscode) {
-        addParameter("nvlscode", nvlscode);
-        return this;
+        return addParameter("nvlscode", nvlscode);
     }
 
     /**
@@ -165,16 +159,14 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param route the IATA or ICAO code of airport in route, comma separated.
      */
     public FlightsBuilder route(final String route) {
-        addParameter("route", route);
-        return this;
+        return addParameter("route", route);
     }
 
     /**
      * Includes delayed flights in the results.
      */
     public FlightsBuilder includeDelayed() {
-        addParameter("includedelays", "true");
-        return this;
+        return addParameter("includedelays", "true");
     }
 
     /**
@@ -194,8 +186,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param fromDate the LocalDate representation of the date.
      */
     public FlightsBuilder from(@Nonnull final LocalDate fromDate) {
-        addParameter("fromdate", fromDate.format(dateFormat));
-        return this;
+        return addParameter("fromdate", fromDate.format(dateFormat));
     }
 
 
@@ -216,8 +207,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      * @param toDate the LocalDate representation of the date.
      */
     public FlightsBuilder to(@Nonnull final LocalDate toDate) {
-        addParameter("todate", toDate.format(dateFormat));
-        return this;
+        return addParameter("todate", toDate.format(dateFormat));
     }
 
     @Override

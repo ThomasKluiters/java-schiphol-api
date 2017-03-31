@@ -13,18 +13,15 @@ public class FlightBuilder extends RequestBuilder<Flight, FlightBuilder> {
     }
 
     public FlightBuilder id(Integer id) {
-        addPathParameter("id", String.valueOf(id));
-        return this;
+        return addPathParameter("id", String.valueOf(id));
     }
 
     public FlightBuilder id(Long id) {
-        addPathParameter("id", String.valueOf(id));
-        return this;
+        return addPathParameter("id", String.valueOf(id));
     }
 
     public FlightBuilder flightName(final String flightName) {
-        addPathParameter("flightName", "/codeshares", flightName);
-        return this;
+        return addPathParameter("flightName", "/codeshares", flightName);
     }
 
 

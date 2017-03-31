@@ -1,6 +1,7 @@
 package nl.schiphol.api.builders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Getter;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
 import nl.schiphol.api.models.Response;
@@ -11,6 +12,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
+import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -35,46 +37,49 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
     private static final String PREVIOUS = "prev";
 
+    @Getter
     private HttpClient httpClient;
 
+    @Getter
     private final Class<T> mappedClass;
 
+    @Getter
     private final String endpoint;
 
-    private List<NameValuePair> pathParameters;
+    @Getter
+    private List<NameValuePair> pathParameters = new ArrayList<>();
 
-    private List<NameValuePair> parameters;
+    @Getter
+    private List<NameValuePair> parameters = new ArrayList<>();
 
-    private List<Header> headers;
+    @Getter
+    private List<Header> headers = new ArrayList<>();
 
     public RequestBuilder(final Class<T> mappedClass, String endpoint) {
         this.mappedClass = mappedClass;
         this.endpoint = endpoint;
+
+        addHeader("Accept", "Application/Json");
     }
 
     public B appId(final String appId) {
-        addParameter("app_id", appId);
-        return getThis();
+        return addParameter("app_id", appId);
     }
 
     public B appKey(final String appKey) {
-        addParameter("app_key", appKey);
-        return getThis();
+        return addParameter("app_key", appKey);
     }
 
-    public B resourceVersion(final String resourceVersion) {
-        addHeader("ResourceVersion", resourceVersion);
-        return getThis();
+    B resourceVersion(final String resourceVersion) {
+        return addHeader("ResourceVersion", resourceVersion);
     }
 
     public B page(final long page) {
-        addParameter("page", String.valueOf(page));
-        return getThis();
+        return addParameter("page", String.valueOf(page));
     }
 
     public B sort(final SortBuilder sort) {
-        addParameter("sort", sort.toString());
-        return getThis();
+        return addParameter("sort", sort.toString());
     }
 
     public B withClient(final HttpClient httpClient) {
@@ -113,7 +118,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
                 return object;
             } else {
-                System.err.println(response);
+                System.err.println(response.getStatusLine());
             }
 
         } catch (IOException | URISyntaxException e) {
@@ -163,14 +168,12 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
 
         String path = getEndpoint();
 
-        if(pathParameters != null) {
-            for (NameValuePair pathParameter : getPathParameters()) {
-                final String pathParameterName = pathParameter.getName();
-                final String pathParameterValue = pathParameter.getValue();
-                path = path.replace("{" + pathParameterName + "}", pathParameterValue);
-            }
-            path = path.replaceAll("\\{.+}", "");
+        for (NameValuePair pathParameter : getPathParameters()) {
+            final String pathParameterName = pathParameter.getName();
+            final String pathParameterValue = pathParameter.getValue();
+            path = path.replace("{" + pathParameterName + "}", pathParameterValue);
         }
+        path = path.replaceAll("\\{.+}", "");
 
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
@@ -182,120 +185,78 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return execute(builder);
     }
 
-    protected boolean hasHeader(final String name) {
-        if(headers == null) return false;
-
-        for (Header header : getHeaders()) {
-            if(header.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasHeader(@Nonnull final String name) {
+        return headers.stream().anyMatch(header -> header.getName().equals(name));
     }
 
-    protected boolean hasParameter(final String name) {
-        if(parameters == null) return false;
-
-        for (NameValuePair parameter: getParameters()) {
-            if(parameter.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+    private boolean hasParameter(@Nonnull final String name) {
+        return parameters.stream().anyMatch(parameter -> parameter.getName().equals(name));
     }
 
-    protected void addParameter(final String name, final String value) {
+    B addParameter(final String name, final String value) {
         final List<NameValuePair> parameters = getParameters();
 
         parameters.removeIf(parameter -> parameter.getName().equals(name));
         parameters.add(new BasicNameValuePair(name, value));
+        return getThis();
     }
 
-    protected void addHeader(final String name, final String value) {
+    private B addHeader(final String name, final String value) {
         final List<Header> headers = getHeaders();
 
         headers.removeIf(header -> header.getName().equals(name));
         headers.add(new BasicHeader(name, value));
+        return getThis();
     }
 
-    protected void addPathParameter(final String name, final String value) {
-        addPathParameter(name, null, value);
+    B addPathParameter(final String name, final String value) {
+        return addPathParameter(name, null, value);
     }
 
-    protected void addPathParameter(final String name, final String extra, final String value) {
+    B addPathParameter(final String name, final String extra, final String value) {
         final List<NameValuePair> pathParameters = getPathParameters();
 
         pathParameters.removeIf(parameter -> parameter.getName().equals(name));
         pathParameters.add(new BasicNameValuePair(name, (extra == null ? "" : extra + "/") + value));
+        return getThis();
     }
 
-
-    public List<NameValuePair> getParameters() {
-        if(parameters == null) {
-            parameters = new ArrayList<>();
-        }
-        return parameters;
+    @Nonnull
+    String getPathParameter(@Nonnull final String name) {
+        return getPathParameters().stream()
+                .filter(parameter -> parameter.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Path parameter %s not set!", name)))
+                .getValue();
     }
 
-    public List<Header> getHeaders() {
-        if(headers == null) {
-            headers = new ArrayList<>();
-        }
-        return headers;
+    @Nonnull
+    String getHeader(@Nonnull final String name) {
+        return getHeaders().stream()
+                .filter(header -> header.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Header %s not set!", name)))
+                .getValue();
     }
 
-    public List<NameValuePair> getPathParameters() {
-        if(pathParameters == null) {
-            pathParameters = new ArrayList<>();
-        }
-        return pathParameters;
+    @Nonnull
+    String getParameter(@Nonnull final String name) {
+        return getParameters().stream()
+                .filter(parameter -> parameter.getName().equals(name))
+                .findFirst()
+                .orElseThrow(()
+                        -> new IllegalArgumentException(String.format("Parameter %s not set!", name)))
+                .getValue();
     }
 
-    String getPathParameter(final String name) {
-        for (NameValuePair parameter : pathParameters) {
-            if(parameter.getName().equals(name)) {
-                return parameter.getValue();
-            }
-        }
-        return null;
-    }
-
-    String getHeader(final String name) {
-        for (Header header : getHeaders()) {
-            if(header.getName().equals(name)) {
-                return header.getValue();
-            }
-        }
-        return null;
-    }
-
-    String getParameter(final String name) {
-        for (NameValuePair parameter : getParameters()) {
-            if(parameter.getName().equals(name)) {
-                return parameter.getValue();
-            }
-        }
-        return null;
-    }
-
-    protected String[] requiredParameters() {
+    private String[] requiredParameters() {
         return new String[]{ "app_id", "app_key" };
     }
 
-    protected String[] requiredHeaders() {
+    private String[] requiredHeaders() {
         return new String[]{ "ResourceVersion" };
-    }
-
-    public HttpClient getHttpClient() {
-        return httpClient;
-    }
-
-    public Class<T> getMappedClass() {
-        return mappedClass;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
     }
 
     protected abstract B getThis();
