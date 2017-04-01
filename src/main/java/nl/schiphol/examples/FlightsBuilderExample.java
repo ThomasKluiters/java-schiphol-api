@@ -39,7 +39,7 @@ public class FlightsBuilderExample {
                 .execute();
 
         for (Flight flight : flights) {
-            System.out.println(flight.getFlightName());
+            System.out.println(flight.getExpectedTimeBoarding());
         }
     }
 
