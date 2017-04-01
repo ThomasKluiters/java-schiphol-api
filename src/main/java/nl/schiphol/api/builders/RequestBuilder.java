@@ -1,6 +1,7 @@
 package nl.schiphol.api.builders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
@@ -105,7 +106,9 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
             HttpResponse response = getHttpClient().execute(get);
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 src = response.getEntity().getContent();
-                T object = new ObjectMapper().readValue(src, getMappedClass());
+                ObjectMapper mapper = new ObjectMapper();
+                mapper.registerModule(new JavaTimeModule());
+                T object = mapper.readValue(src, getMappedClass());
                 extractPaginationLinks(response, object);
                 object.setBuilder(this);
 

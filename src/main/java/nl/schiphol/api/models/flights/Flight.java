@@ -4,6 +4,11 @@ import lombok.Data;
 import nl.schiphol.api.models.Response;
 import nl.schiphol.api.models.destinations.Destination;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.OffsetDateTime;
+
 /**
  * Created by Thomas on 22-3-2017.
  */
@@ -14,7 +19,7 @@ public class Flight extends Response<Flight> {
 
     private String flightName;
 
-    private String scheduleDate;
+    private LocalDate scheduleDate;
 
     private String flightDirection;
 
@@ -24,7 +29,7 @@ public class Flight extends Response<Flight> {
 
     private String prefixICAO;
 
-    private String scheduleTime;
+    private LocalTime scheduleTime;
 
     private String serviceType;
 
@@ -32,13 +37,13 @@ public class Flight extends Response<Flight> {
 
     private FlightCodeShares codeshares;
 
-    private String estimatedLandingTime;
+    private LocalDateTime estimatedLandingTime;
 
-    private String actualLandingTime;
+    private LocalDateTime actualLandingTime;
 
-    private String publicEstimatedOffBlockTime;
+    private LocalDateTime publicEstimatedOffBlockTime;
 
-    private String actualOffBlockTime;
+    private LocalDateTime actualOffBlockTime;
 
     private FlightState publicFlightState;
 
@@ -62,11 +67,11 @@ public class Flight extends Response<Flight> {
 
     private String airlineCode;
 
-    private String expectedTimeGateOpen;
+    private OffsetDateTime expectedTimeGateOpen;
 
-    private String expectedTimeBoarding;
+    private OffsetDateTime expectedTimeBoarding;
 
-    private String expectedTimeGateClosing;
+    private OffsetDateTime expectedTimeGateClosing;
 
     private String schemaVersion;
 
