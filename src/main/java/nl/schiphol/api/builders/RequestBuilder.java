@@ -3,6 +3,7 @@ package nl.schiphol.api.builders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
+import lombok.Setter;
 import nl.schiphol.api.builders.exceptions.RequiredHeaderException;
 import nl.schiphol.api.builders.exceptions.RequiredParameterException;
 import nl.schiphol.api.models.Response;
@@ -21,10 +22,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by Thomas on 22-3-2017.
@@ -48,16 +52,17 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     private final Class<T> mappedClass;
 
     @Getter
-    private final String endpoint;
+    @Setter
+    private String endpoint;
 
     @Getter
-    private List<NameValuePair> pathParameters = new ArrayList<>();
+    private HashMap<String, String> pathParameters = new HashMap<>();
 
     @Getter
-    private List<NameValuePair> parameters = new ArrayList<>();
+    private HashMap<String, String> parameters = new HashMap<>();
 
     @Getter
-    private List<Header> headers = new ArrayList<>();
+    private HashMap<String, String> headers = new HashMap<>();
 
     public RequestBuilder(final Class<T> mappedClass, String endpoint) {
         this.mappedClass = mappedClass;
@@ -105,7 +110,9 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         try {
             URI uri = builder.build();
             HttpGet get = new HttpGet(uri);
-            for (Header header : headers) get.addHeader(header);
+            for (Map.Entry<String, String> header : getHeaders().entrySet()) {
+                get.addHeader(header.getKey(), header.getValue());
+            }
             HttpResponse response = getHttpClient().execute(get);
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 src = response.getEntity().getContent();
@@ -172,89 +179,65 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
             if(!hasParameter(requiredParameterName)) throw new RequiredParameterException(requiredParameterName);
         }
 
-        String path = getEndpoint();
+        String path = getPathParameters().entrySet().stream()
+                .reduce(getEndpoint(), (p, param) -> p.replace("{" + param.getKey() + "}", param.getValue()), String::concat);
 
-        for (NameValuePair pathParameter : getPathParameters()) {
-            final String pathParameterName = pathParameter.getName();
-            final String pathParameterValue = pathParameter.getValue();
-            path = path.replace("{" + pathParameterName + "}", pathParameterValue);
-        }
-        path = path.replaceAll("\\{.+}", "");
+        List<NameValuePair> params = getParameters().entrySet().stream()
+                .map(entry -> new BasicNameValuePair(entry.getKey(), entry.getValue()))
+                .collect(Collectors.toList());
 
         URIBuilder builder = new URIBuilder()
                 .setScheme("https")
                 .setHost("api.schiphol.nl")
                 .setPort(443)
-            .addParameters(getParameters())
+            .addParameters(params)
             .setPath(path);
 
         return execute(builder);
     }
 
     private boolean hasHeader(@Nonnull final String name) {
-        return headers.stream().anyMatch(header -> header.getName().equals(name));
+        return getHeaders().containsKey(name);
     }
 
     private boolean hasParameter(@Nonnull final String name) {
-        return parameters.stream().anyMatch(parameter -> parameter.getName().equals(name));
+        return getParameters().containsKey(name);
     }
 
     B addParameter(final String name, final String value) {
-        final List<NameValuePair> parameters = getParameters();
-
-        parameters.removeIf(parameter -> parameter.getName().equals(name));
-        parameters.add(new BasicNameValuePair(name, value));
+        getParameters().put(name, value);
         return getThis();
     }
 
     private B addHeader(final String name, final String value) {
-        final List<Header> headers = getHeaders();
-
-        headers.removeIf(header -> header.getName().equals(name));
-        headers.add(new BasicHeader(name, value));
+        getHeaders().put(name, value);
         return getThis();
     }
 
     B addPathParameter(final String name, final String value) {
-        return addPathParameter(name, null, value);
-    }
-
-    B addPathParameter(final String name, final String extra, final String value) {
-        final List<NameValuePair> pathParameters = getPathParameters();
-
-        pathParameters.removeIf(parameter -> parameter.getName().equals(name));
-        pathParameters.add(new BasicNameValuePair(name, (extra == null ? "" : extra + "/") + value));
+        getPathParameters().put(name, value);
         return getThis();
     }
 
     @Nonnull
+    String getParameter(@Nonnull final String name) {
+        return getParameters().computeIfAbsent(name, s -> {
+            throw new IllegalArgumentException(String.format("Parameter %s not set!", name));
+        });
+    }
+
+    @Nonnull
     String getPathParameter(@Nonnull final String name) {
-        return getPathParameters().stream()
-                .filter(parameter -> parameter.getName().equals(name))
-                .findFirst()
-                .orElseThrow(()
-                        -> new IllegalArgumentException(String.format("Path parameter %s not set!", name)))
-                .getValue();
+        return getPathParameters().computeIfAbsent(name, s -> {
+            throw new IllegalArgumentException(String.format("Path parameter %s not set!", name));
+        });
     }
 
     @Nonnull
     String getHeader(@Nonnull final String name) {
-        return getHeaders().stream()
-                .filter(header -> header.getName().equals(name))
-                .findFirst()
-                .orElseThrow(()
-                        -> new IllegalArgumentException(String.format("Header %s not set!", name)))
-                .getValue();
-    }
-
-    @Nonnull
-    String getParameter(@Nonnull final String name) {
-        return getParameters().stream()
-                .filter(parameter -> parameter.getName().equals(name))
-                .findFirst()
-                .orElseThrow(()
-                        -> new IllegalArgumentException(String.format("Parameter %s not set!", name)))
-                .getValue();
+        return getHeaders().computeIfAbsent(name, s -> {
+            throw new IllegalArgumentException(String.format("Header %s not set!", name));
+        });
     }
 
     private String[] requiredParameters() {

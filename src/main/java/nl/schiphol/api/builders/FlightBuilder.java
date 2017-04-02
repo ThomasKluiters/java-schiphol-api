@@ -8,7 +8,7 @@ import nl.schiphol.api.models.flights.Flight;
 public class FlightBuilder extends RequestBuilder<Flight, FlightBuilder> {
 
     public FlightBuilder() {
-        super(Flight.class, "/public-flights/flights/{id}{flightName}");
+        super(Flight.class, "/public-flights/flights/{id}");
         resourceVersion("v3");
     }
 
@@ -21,7 +21,8 @@ public class FlightBuilder extends RequestBuilder<Flight, FlightBuilder> {
     }
 
     public FlightBuilder flightName(final String flightName) {
-        return addPathParameter("flightName", "/codeshares", flightName);
+        setEndpoint(getEndpoint() + "/codeshares/{flightName}");
+        return addPathParameter("flightName", flightName);
     }
 
 
