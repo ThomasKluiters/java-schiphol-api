@@ -39,7 +39,7 @@ public class FlightBuilderTest extends RequestBuilderTest<FlightBuilder> {
         FlightBuilder builder = new FlightBuilder();
         builder.flightName(testFlightName);
 
-        assertEquals("/codeshares/" + testFlightName, builder.getPathParameter("flightName"));
+        assertEquals(testFlightName, builder.getPathParameter("flightName"));
     }
 
     @Test
