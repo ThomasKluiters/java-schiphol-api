@@ -2,7 +2,6 @@ package nl.schiphol.api.models.flights;
 
 import lombok.Data;
 import nl.schiphol.api.models.Response;
-import nl.schiphol.api.models.destinations.Destination;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

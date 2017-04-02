@@ -4,7 +4,10 @@ import lombok.Data;
 import nl.schiphol.api.builders.RequestBuilder;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Thomas on 27-3-2017.

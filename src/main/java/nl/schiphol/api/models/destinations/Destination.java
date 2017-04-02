@@ -2,7 +2,6 @@ package nl.schiphol.api.models.destinations;
 
 import lombok.Data;
 import nl.schiphol.api.models.Response;
-import nl.schiphol.api.models.airlines.Airline;
 
 /**
  * Created by Thomas on 22-3-2017.
