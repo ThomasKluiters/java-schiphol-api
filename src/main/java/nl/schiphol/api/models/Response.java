@@ -20,6 +20,8 @@ public abstract class Response<T extends Response<T>> {
 
     private String first;
 
+    private String schemaVersion;
+
     private Long page = 0L;
 
     private RequestBuilder<T, ?> builder;

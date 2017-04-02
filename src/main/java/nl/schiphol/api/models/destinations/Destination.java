@@ -18,8 +18,6 @@ public class Destination extends Response<Destination> {
 
     private PublicName publicName;
 
-    private String schemaVersion;
-
     Destination() { }
 
     @Override

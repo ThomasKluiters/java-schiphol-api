@@ -17,8 +17,6 @@ public class AircraftType extends Response<AircraftType> {
 
     private String iatasub;
 
-    private String schemaVersion;
-
     AircraftType() { }
 
     @Override

@@ -15,8 +15,6 @@ public class Flights extends Response<Flights> implements Iterable<Flight> {
 
     private List<Flight> flights;
 
-    private String schemaVersion;
-
     Flights() { }
 
     @Override

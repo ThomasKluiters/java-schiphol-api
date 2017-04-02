@@ -73,8 +73,6 @@ public class Flight extends Response<Flight> {
 
     private OffsetDateTime expectedTimeGateClosing;
 
-    private String schemaVersion;
-
     /**
      * Default constructor for Object Mapper
      */
