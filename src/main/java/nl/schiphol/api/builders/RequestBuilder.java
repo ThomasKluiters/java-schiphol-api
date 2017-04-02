@@ -14,7 +14,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.message.BasicNameValuePair;
 
 import javax.annotation.Nonnull;
@@ -22,10 +21,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.*;
-import java.util.function.BiFunction;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -33,7 +32,7 @@ import java.util.stream.Collectors;
 /**
  * Created by Thomas on 22-3-2017.
  */
-public abstract class RequestBuilder<T extends Response<T>, B extends RequestBuilder> {
+public abstract class RequestBuilder<T extends Response<T>, B extends RequestBuilder<T, ?>> {
 
     private final Pattern pattern = Pattern.compile("<(.+)>; rel=\"(.+)\"");
 
@@ -79,7 +78,7 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return addParameter("app_key", appKey);
     }
 
-    B resourceVersion(final String resourceVersion) {
+    public B resourceVersion(final String resourceVersion) {
         return addHeader("ResourceVersion", resourceVersion);
     }
 
@@ -96,13 +95,17 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         return getThis();
     }
 
-    public T execute(String uri) {
+    public B init(String uri) {
         try {
-            return execute(new URIBuilder(uri));
+            URIBuilder builder = new URIBuilder(uri);
+            builder.getQueryParams()
+                    .forEach(parameter -> addParameter(parameter.getName(), parameter.getValue()));
+
+            setEndpoint(builder.getPath());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-        return null;
+        return getThis();
     }
 
     public T execute(URIBuilder builder) {
@@ -110,24 +113,16 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
         try {
             URI uri = builder.build();
             HttpGet get = new HttpGet(uri);
-            for (Map.Entry<String, String> header : getHeaders().entrySet()) {
-                get.addHeader(header.getKey(), header.getValue());
-            }
+            getHeaders().forEach(get::addHeader);
             HttpResponse response = getHttpClient().execute(get);
+
             if(response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
                 src = response.getEntity().getContent();
                 ObjectMapper mapper = new ObjectMapper();
                 mapper.registerModule(new JavaTimeModule());
                 T object = mapper.readValue(src, getMappedClass());
-                extractPaginationLinks(response, object);
-                object.setBuilder(this);
 
-                for (NameValuePair pair : builder.getQueryParams()) {
-                    if(pair.getName().equals("page")) {
-                        final long page = Long.valueOf(pair.getValue());
-                        object.setPage(page);
-                    }
-                }
+                extractPaginationLinks(response, object);
 
                 return object;
             } else {
@@ -148,6 +143,13 @@ public abstract class RequestBuilder<T extends Response<T>, B extends RequestBui
     }
 
     private void extractPaginationLinks(HttpResponse response, T object) {
+        if(hasParameter("page")) {
+            object.setPage(Long.valueOf(getParameter("page")));
+        } else {
+            object.setPage(0L);
+        }
+        object.setBuilder(this);
+
         if(response.getHeaders("Link") != null) {
             for (Header link : response.getHeaders("Link")) {
                 for (String value : link.getValue().split(", ")) {

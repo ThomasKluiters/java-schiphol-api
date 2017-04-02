@@ -48,19 +48,19 @@ public abstract class Response<T extends Response<T>> {
     abstract protected T get();
 
     public T next() {
-        return getBuilder().execute(getNext());
+        return getBuilder().init(getNext()).execute();
     }
 
     public T previous() {
-        return getBuilder().execute(getPrevious());
+        return getBuilder().init(getPrevious()).execute();
     }
 
     public T last() {
-        return getBuilder().execute(getLast());
+        return getBuilder().init(getLast()).execute();
     }
 
     public T first() {
-        return getBuilder().execute(getFirst());
+        return getBuilder().init(getFirst()).execute();
     }
 
     public ResponseIterator all() {
