@@ -15,8 +15,6 @@ public class AircraftTypes extends Response<AircraftTypes> implements Iterable<A
 
     private List<AircraftType> aircraftTypes;
 
-    private String schemaVersion;
-
     AircraftTypes() { }
 
     @Nonnull

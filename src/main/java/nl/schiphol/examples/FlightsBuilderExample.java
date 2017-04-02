@@ -3,12 +3,11 @@ package nl.schiphol.examples;
 import nl.schiphol.api.Schiphol;
 import nl.schiphol.api.SchipholCredentials;
 import nl.schiphol.api.SchipholCredentialsUtil;
+import nl.schiphol.api.builders.SortBuilder;
 import nl.schiphol.api.models.flights.Flight;
 import nl.schiphol.api.models.flights.Flights;
-import nl.schiphol.api.builders.SortBuilder;
 
 import java.time.LocalDate;
-import java.util.Arrays;
 
 /**
  * Created by Thomas on 22-3-2017.

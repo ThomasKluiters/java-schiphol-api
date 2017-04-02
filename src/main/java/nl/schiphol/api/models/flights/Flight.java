@@ -2,7 +2,6 @@ package nl.schiphol.api.models.flights;
 
 import lombok.Data;
 import nl.schiphol.api.models.Response;
-import nl.schiphol.api.models.destinations.Destination;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -72,8 +71,6 @@ public class Flight extends Response<Flight> {
     private OffsetDateTime expectedTimeBoarding;
 
     private OffsetDateTime expectedTimeGateClosing;
-
-    private String schemaVersion;
 
     /**
      * Default constructor for Object Mapper

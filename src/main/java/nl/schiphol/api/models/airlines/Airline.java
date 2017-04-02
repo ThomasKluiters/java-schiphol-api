@@ -17,8 +17,6 @@ public class Airline extends Response<Airline> {
 
     private String publicName;
 
-    private String schemaVersion;
-
     Airline() { }
 
     @Override

@@ -15,8 +15,6 @@ public class Destinations extends Response<Destinations> implements Iterable<Des
 
     private List<Destination> destinations;
 
-    private String schemaVersion;
-
     Destinations() { }
 
     @Override

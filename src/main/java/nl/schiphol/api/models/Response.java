@@ -4,7 +4,10 @@ import lombok.Data;
 import nl.schiphol.api.builders.RequestBuilder;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * Created by Thomas on 27-3-2017.
@@ -19,6 +22,8 @@ public abstract class Response<T extends Response<T>> {
     private String last;
 
     private String first;
+
+    private String schemaVersion;
 
     private Long page = 0L;
 
@@ -43,19 +48,19 @@ public abstract class Response<T extends Response<T>> {
     abstract protected T get();
 
     public T next() {
-        return getBuilder().execute(getNext());
+        return getBuilder().init(getNext()).execute();
     }
 
     public T previous() {
-        return getBuilder().execute(getPrevious());
+        return getBuilder().init(getPrevious()).execute();
     }
 
     public T last() {
-        return getBuilder().execute(getLast());
+        return getBuilder().init(getLast()).execute();
     }
 
     public T first() {
-        return getBuilder().execute(getFirst());
+        return getBuilder().init(getFirst()).execute();
     }
 
     public ResponseIterator all() {
