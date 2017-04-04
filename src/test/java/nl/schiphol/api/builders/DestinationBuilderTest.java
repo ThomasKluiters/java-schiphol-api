@@ -18,7 +18,7 @@ public class DestinationBuilderTest extends RequestBuilderTest<DestinationBuilde
     @Test
     public void IATAPathParameterTest() {
         DestinationBuilder builder = new DestinationBuilder();
-        builder.iata(testIATA);
+        builder.IATA(testIATA);
 
         assertEquals(testIATA, builder.getPathParameter("iata"));
     }
@@ -26,7 +26,7 @@ public class DestinationBuilderTest extends RequestBuilderTest<DestinationBuilde
     @Test
     public void verifyIATAPathParameterTest() throws IOException {
         mockedBuilder
-                .iata(testIATA)
+                .IATA(testIATA)
                 .execute();
 
         verify(mockedHttpClient).execute(argThat(new URIPathMatcher("/public-flights/destinations/" + testIATA)));

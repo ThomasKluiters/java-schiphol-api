@@ -109,7 +109,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      *
      * @param raw a character with either the value 'A' or 'D' representing the flight direction.
      */
-    public FlightsBuilder direction(@Nonnull final char raw) {
+    public FlightsBuilder direction(final char raw) {
         switch (raw) {
             case 'A':
                 return direction(FlightDirection.ARRIVING);
@@ -149,7 +149,7 @@ public class FlightsBuilder extends RequestBuilder<Flights, FlightsBuilder> {
      *
      * @param nvlscode NVLS code of a airliner.
      */
-    public FlightsBuilder nvlsCode(@Nonnull final String nvlscode) {
+    public FlightsBuilder NVLSCode(@Nonnull final String nvlscode) {
         return addParameter("nvlscode", nvlscode);
     }
 
