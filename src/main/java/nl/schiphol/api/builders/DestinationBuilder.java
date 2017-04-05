@@ -20,7 +20,7 @@ public class DestinationBuilder extends RequestBuilder<Destination, DestinationB
      *
      * @param iata IATA code.
      */
-    public DestinationBuilder iata(@Nonnull final String iata) {
+    public DestinationBuilder IATA(@Nonnull final String iata) {
         return addPathParameter("iata", iata);
     }
 
