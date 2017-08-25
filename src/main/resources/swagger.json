@@ -7,7 +7,40 @@
   },
   "paths": {
     "/flights": {
-      "get": {}
+      "get": {
+        "summary": "Get flight",
+        "description": "Get flight\n",
+        "responses": {
+          "200": {
+            "description": "Get flight",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Put flight",
+        "description": "Put flight",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Put",
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
     }
   },
   "securityDefinitions": {
