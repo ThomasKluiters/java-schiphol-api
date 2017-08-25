@@ -1,1 +1,16 @@
-{"swagger":"2.0","info":{"title":"Schiphol APi","description":"","version":"1.0.0"}}
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Schiphol APi",
+    "description": "",
+    "version": "1.0.0"
+  },
+  "securityDefinitions": {
+    "App Key Scheme": {
+      "type": "apiKey",
+      "description": "An app key",
+      "name": "appKey",
+      "in": "header"
+    }
+  }
+}
