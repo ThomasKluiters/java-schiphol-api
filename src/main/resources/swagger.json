@@ -5,6 +5,11 @@
     "description": "",
     "version": "1.0.0"
   },
+  "paths": {
+    "/flights": {
+      "get": {}
+    }
+  },
   "securityDefinitions": {
     "App Key Scheme": {
       "type": "apiKey",
